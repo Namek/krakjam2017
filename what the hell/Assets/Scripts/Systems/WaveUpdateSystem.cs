@@ -129,6 +129,7 @@ public class WaveUpdateSystem {
 		//Assert(wave1.horzDir != wave2.horzDir && wave1.altitude );
 		var newWave = new WaveState();
 
+		return null;
 		//wave1.
 		// TODO
 	}
