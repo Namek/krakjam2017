@@ -1,0 +1,18 @@
+WaveUpdateSystem
+
+onPlayerLand(x, player?)
+getWaveHeight(x)
+update(playerStates, deltaTime)
+emit event when player is hit by wave
+emit event when base is hit
+
+player index
+
+
+
+
+PlayerState
+ id
+ x
+ y
+ speed
