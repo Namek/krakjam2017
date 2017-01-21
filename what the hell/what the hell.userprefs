@@ -1,10 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Systems\ProceduralMesh.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Systems\PlayerUpdateSystem.cs">
     <Files>
-      <File FileName="Assets\Lava_Flowing_Shader\Scripts\ScrollingUVs_Layers.cs" Line="14" Column="25" />
-      <File FileName="Assets\setUVCords.js" Line="21" Column="3" />
-      <File FileName="Assets\Scripts\Systems\ProceduralMesh.cs" Line="46" Column="1" />
+      <File FileName="Assets\Scripts\Systems\PlayerUpdateSystem.cs" Line="28" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
