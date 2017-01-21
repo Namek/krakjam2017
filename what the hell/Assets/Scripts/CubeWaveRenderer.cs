@@ -6,6 +6,8 @@ public class CubeWaveRenderer : MonoBehaviour {
     public float areaToCover = 30f;
     public GameObject cube;
     public List<Transform> cubeList;
+	public GameManager gameManager;
+
 	// Use this for initialization
 	void Start () {
         for (int i = 0; i < (int)areaToCover; i++)
@@ -19,7 +21,7 @@ public class CubeWaveRenderer : MonoBehaviour {
 
     float getHeight(float x)
     {
-        return 0;
+        return gameManager.waveUpdateSystem.getWaveHeight(x);
     }
 
 	// Update is called once per frame

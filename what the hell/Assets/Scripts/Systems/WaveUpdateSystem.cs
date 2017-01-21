@@ -11,7 +11,11 @@ public class WaveUpdateSystem {
 	private List<WaveState> wavesToAdd = new List<WaveState>();
 
 
-	void Update(PlayerState[] playerStates, float deltaTime) {
+	public void Start() {
+	}
+
+
+	public void Update(PlayerState[] playerStates, float deltaTime) {
 
 		//eventHandlerManager.globalBroadcast(null, eventChannels.inGame, inGameChannelEvents.baseHitByWave, )
 
@@ -90,15 +94,17 @@ public class WaveUpdateSystem {
 	}
 
 	public float getWaveHeight(float x) {
-		float altitudeSum = 0;
+		float altitudeMax = 0;
 
 		foreach (var wave in waves) {
 			if (isPointInWaveRegion(wave, x)) {
-				altitudeSum += wave.altitude;
+				if (wave.altitude > altitudeMax) {
+					altitudeMax = wave.altitude;
+				}							
             }
         }
 
-		return altitudeSum;
+		return altitudeMax;
 	}
 
 	private static bool isPointInWaveRegion(WaveState wave, float x) {
