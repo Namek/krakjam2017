@@ -5,9 +5,12 @@ using System.Text;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-	// data
-	public float laneLeft = 0;
-	public float laneRight = 100;
+    public float[] playerBaseHealth;
+
+    // data
+    public float damageFactor = 1f;
+    public float laneLeft = 0;
+    public float laneRight = 100;
     public float refractaryCollisionPeriod;
     public float refractaryCollisionDistance;
 
@@ -45,6 +48,7 @@ public class GameManager : MonoBehaviour {
 
 
 	void Awake() {
+        eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, onBaseHit );
 		waveUpdateSystem = new WaveUpdateSystem(this);
 		playerUpdateSystem = new PlayerUpdateSystem(this, characters,waveUpdateSystem, refractaryCollisionPeriod,refractaryCollisionDistance );
 		proceduralMesh.fieldLenght = (int)laneWidth;
@@ -58,6 +62,12 @@ public class GameManager : MonoBehaviour {
         inputManager.UpdateCharacterMovements();
 		playerUpdateSystem.Update(Time.time,Time.deltaTime);
 	}
+
+    void onBaseHit(object o)
+    {
+        WaveState w = o as WaveState;
+        playerBaseHealth[(int)w.horzDir] -= w.altitude * damageFactor;
+    }
 
     public enum gameState {
         mainMenu, game, endGameMenu

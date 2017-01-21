@@ -61,7 +61,8 @@ public class PlayerUpdateSystem {
 			var player = players[i].refreshPositionData();
 			var playerBeforeUpdate = playersBeforeUpdate[i];
             var waveHeight = waveSystem.getWaveHeight(player.x);
-            
+
+            Debug.Log(player.x+" sigh " +playerBeforeUpdate.y+" - "+waveHeight + " * " + player.y + " - " + waveHeight + " / " + player.y );
             if ((playerBeforeUpdate.y - waveHeight) * (player.y - waveHeight) < 0&& player.y<=waveHeight) {
                 bool tooSoon = false;
                 foreach (var item in existingCollisions)
@@ -72,6 +73,7 @@ public class PlayerUpdateSystem {
                 if (!tooSoon)
                 {
                     //legit collision
+                    Debug.Log("legit collision mammt");
                     waveSystem.PushDown(player.x, getPreferredPush(player));
                 }
 			}

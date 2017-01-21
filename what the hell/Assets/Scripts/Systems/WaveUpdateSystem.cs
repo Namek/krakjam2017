@@ -239,7 +239,7 @@ public class WaveUpdateSystem {
             }
         }
 
-		return altitude;
+		return altitude+1f;
 	}
 
 	private static bool isPointInWaveRegion(WaveState wave, float x) {
