@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class WaveUpdateSystem {
 	private const float WAVE_MIN_PERCENT_X_CENTER_DIFF_TO_COLLIDE = 0.01f;
+	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.2f;
+	private const float WAVE_SPEEDUP_FACTOR = 1.5f;
 
 	GameManager gameManager;
 
@@ -21,7 +23,7 @@ public class WaveUpdateSystem {
 	public void Update(PlayerState[] playerStates, float deltaTime) {
 		// move waves
 		foreach (var wave in waves) {
-			wave.xCenter += (wave.horzDir == WaveState.HorzDir.Left ? -1 : 1) * deltaTime * wave.speed;
+			wave.xCenter += (wave.horzDir == HorzDir.Left ? -1 : 1) * deltaTime * wave.speed;
 			float width2 = calcWaveWidth(wave)/2;
 
 			if (wave.xCenter - width2 > gameManager.laneRight || wave.xCenter + width2 < gameManager.laneLeft) {
@@ -105,12 +107,50 @@ public class WaveUpdateSystem {
 		wavesToAdd.Clear();
 	}
 
-	public void PushDown(float x) {
-		// TODO
+	public void PushDown(float x, HorzDir preferredPushDir) {
+		WaveState closestWave = null;
+		float highestAltitude = 0;
 
+		foreach (var wave in waves) {
+			if (isPointInWaveRegion(wave, x)) {
+				float y = calcWaveHeight(wave, x);
+				if (highestAltitude < y) {
+					highestAltitude = y;
+					closestWave = wave;
+				}
+			}
+		}
+
+		if (closestWave == null)
+			return;
+
+		// detect collision region: front/back/center
+		float width = calcWaveWidth(closestWave);
+		float topWidth2 = WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN * width / 2;
+
+		// stepped on the tight center, make it faster and push backwards!
+		bool didHitTightCenter = Math.Abs(x - closestWave.xCenter) <= topWidth2;
+		HorzDir pushDir = preferredPushDir;
+
+		if (didHitTightCenter) {
+			closestWave.speed *= WAVE_SPEEDUP_FACTOR;
+		}
+		else {
+			// stepped on the left, push to the right
+			if (x < closestWave.xCenter) {
+				pushDir = HorzDir.Right;
+			}
+
+			// stepped on the right, push to the left
+			else if (x > closestWave.xCenter) {
+				pushDir = HorzDir.Left;
+			}
+		}
+
+		closestWave.horzDir = pushDir;
 	}
 
-	public void CreateWave(float xLeftOnStart, WaveState.HorzDir dir) {
+	public void CreateWave(float xLeftOnStart, HorzDir dir) {
 		var wave = new WaveState();
 		wave.xCenterOnStart = xLeftOnStart;
 		wave.altitude = 3;
@@ -119,21 +159,17 @@ public class WaveUpdateSystem {
 		this.waves.Add(wave);
 	}
 
+	// gets altitude "sum" of all waves
 	public float getWaveHeight(float x) {
 		float altitude = 0;
 
 		foreach (var wave in waves) {
 			float waveWidth = calcWaveWidth(wave);
 			float xRight = wave.xCenter + waveWidth/2;
-			float dirX = wave.horzDir == WaveState.HorzDir.Left ? -1 : 1;
+			float dirX = wave.horzDir == HorzDir.Left ? -1 : 1;
 
 			if (isPointInWaveRegion(wave, x)) {
-				// should be within [0, 1]
-				float startPointDistFactor = Math.Min(1, Math.Abs(wave.xCenterOnStart - x) / waveWidth*2);
-
-				// should be within [-0.5, 0.5]
-				float centerDistFactor = (wave.xCenter - x)*2 / waveWidth;
-				float y = Mathf.Cos(centerDistFactor * Mathf.PI/2) * wave.altitude * startPointDistFactor;
+				float y = calcWaveHeight(wave, x);
 
 				if (y > altitude) {
 					altitude = y;
@@ -146,7 +182,21 @@ public class WaveUpdateSystem {
 
 	private static bool isPointInWaveRegion(WaveState wave, float x) {
 		float width2 = calcWaveWidth(wave);
-		return x >= (wave.xCenter - width2) && x <= (wave.xCenter + width2);
+		return x > (wave.xCenter - width2) && x < (wave.xCenter + width2);
+	}
+
+	// the `x` is global, this ignores merging waves
+	private static float calcWaveHeight(WaveState wave, float x) {
+		float waveWidth = calcWaveWidth(wave);
+
+		// should be within [0, 1]
+		float startPointDistFactor = Math.Min(1, Math.Abs(wave.xCenterOnStart - x) / waveWidth*2);
+
+		// should be within [-0.5, 0.5]
+		float centerDistFactor = (wave.xCenter - x)*2 / waveWidth;
+		float y = Mathf.Cos(centerDistFactor * Mathf.PI/2) * wave.altitude * startPointDistFactor;
+
+		return y;
 	}
 
 	private static float calcWaveWidth(WaveState wave) {
@@ -162,7 +212,7 @@ public class WaveUpdateSystem {
 		newWave.altitude = (wave1.altitude + wave2.altitude)/2;
 		newWave.speed = (wave1.speed + wave2.speed)/2;
 
-		newWave.xCenter = dir == WaveState.HorzDir.Left && wave1.xCenter < wave2.xCenter
+		newWave.xCenter = dir == HorzDir.Left && wave1.xCenter < wave2.xCenter
 			? wave1.xCenter : wave2.xCenter;
 
 		return newWave;

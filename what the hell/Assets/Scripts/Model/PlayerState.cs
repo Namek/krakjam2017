@@ -5,10 +5,16 @@ public class PlayerState {
 	public float y;
 	public float speed;
 	public int id;
+	public HorzDir playerHousePosition;
 
 	public PlayerState(int id) {
 		this.id = id;
 	}		   
+
+	public PlayerState setHouse(HorzDir playerHousePosition) {
+		this.playerHousePosition = playerHousePosition;
+		return this;
+	}
 
 	public PlayerState setX(float x) {
 		this.x = x;
@@ -24,5 +30,6 @@ public class PlayerState {
 		this.x = other.x;
 		this.y = other.y;
 		this.speed = other.speed;
+		this.playerHousePosition = other.playerHousePosition;
 	}
 }

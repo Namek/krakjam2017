@@ -17,8 +17,8 @@ public class PlayerUpdateSystem {
 		this.gameManager = gameManager;
 
 		players = new PlayerState[] {
-			new PlayerState(1).setX(5),
-			new PlayerState(2).setX(10)
+			new PlayerState(1).setHouse(HorzDir.Left).setX(gameManager.laneLeft + 1),
+			new PlayerState(2).setHouse(HorzDir.Right).setX(gameManager.laneRight - 1)
 		};
 		playersBeforeUpdate = new PlayerState[players.Length];
 		for (var i = 0; i < players.Length; ++i) {
@@ -38,7 +38,7 @@ public class PlayerUpdateSystem {
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			// TODO just a debug of wave rendering
-			gameManager.waveUpdateSystem.CreateWave(players[0].x, WaveState.HorzDir.Right);
+			gameManager.waveUpdateSystem.CreateWave(players[0].x, HorzDir.Right);
 		}
 
 		for (var i = 0; i < players.Length; ++i) {
@@ -53,7 +53,8 @@ public class PlayerUpdateSystem {
 
 			// detect player-wave
 			if (player.y <= waveHeight) {
-				gameManager.waveUpdateSystem.PushDown(player.x);
+				var preferredWavePushDir = player.playerHousePosition == HorzDir.Left ? HorzDir.Right : HorzDir.Left;
+				gameManager.waveUpdateSystem.PushDown(player.x, preferredWavePushDir);
 			}
 
 			// otherwise, detect player-floor

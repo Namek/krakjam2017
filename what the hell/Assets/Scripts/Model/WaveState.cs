@@ -10,9 +10,5 @@ public class WaveState {
 	public HorzDir horzDir;
 	public float speed;
 
-	public bool hasDealtDamage = false;
-
-	public enum HorzDir {
-		Left, Right
-	}					
+	//public bool hasDealtDamage = false;		
 }
