@@ -50,9 +50,9 @@ public class PlayerUpdateSystem {
         {
             waveSystem.CreateWave(players[1].x, HorzDir.Right);
         }
-        var _player = players[1].refreshPositionData();
-        var _playerBeforeUpdate = playersBeforeUpdate[0];
-        var _waveHeight = waveSystem.getWaveHeight(_player.x);
+        //var _player = players[1].refreshPositionData();
+        //var _playerBeforeUpdate = playersBeforeUpdate[0];
+        //var _waveHeight = waveSystem.getWaveHeight(_player.x);
         rememberPlayerStates();
         forgetOldCollisions(currentTime);
 
@@ -91,8 +91,9 @@ public class PlayerUpdateSystem {
     bool isCollisionTooSoon(PlayerFluidCollision item, float currentTime, int playerId)
     {
         return  playerId == item.player.id &&(
-                    (currentTime - item.collisionTime < refractaryCollisionPeriod) ||
-                    ((players[playerId].transform.position - item.collisionPosition).magnitude < refractaryCollisionDistance )
+                    (currentTime - item.collisionTime < refractaryCollisionPeriod) 
+                    //||
+                    //((players[playerId].transform.position - item.collisionPosition).magnitude < refractaryCollisionDistance )
                 );
     }
 
