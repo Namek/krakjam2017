@@ -38,7 +38,10 @@ public class WaveUpdateSystem {
 				float width2 = calcWaveWidth(wave)/2;
 
 				if (wave.xCenter < gameManager.laneLeft || wave.xCenter > gameManager.laneRight) {
-					eventHandlerManager.globalBroadcast(null, eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, wave);
+					if (!wave.hasDealtDamage) {
+						wave.hasDealtDamage = true;
+						eventHandlerManager.globalBroadcast(null, eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, wave);
+					}
 				}
 
 				if (wave.xCenter - width2 > gameManager.laneRight || wave.xCenter + width2 < gameManager.laneLeft) {

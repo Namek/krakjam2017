@@ -11,4 +11,5 @@ public class WaveState {
 	public float speed;
 	public bool isWasted = false;
 	public bool isCollidable = true;
+	public bool hasDealtDamage = false;
 }
