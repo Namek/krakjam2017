@@ -150,9 +150,10 @@ public class WaveUpdateSystem {
 		closestWave.horzDir = pushDir;
 	}
 
-	public void CreateWave(float xLeftOnStart, HorzDir dir) {
+	public void CreateWave(float xCenterOnStart, HorzDir dir) {
 		var wave = new WaveState();
-		wave.xCenterOnStart = xLeftOnStart;
+		wave.xCenterOnStart = xCenterOnStart;
+		wave.xCenter = xCenterOnStart;
 		wave.altitude = 3;
 		wave.horzDir = dir;
 		wave.speed = 16f;

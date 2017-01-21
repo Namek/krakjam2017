@@ -36,9 +36,12 @@ public class PlayerUpdateSystem {
 	public void Update(float deltaTime) {
 		rememberPlayerStates();
 
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			// TODO just a debug of wave rendering
+		if (Input.GetKeyDown(KeyCode.A)) {
 			gameManager.waveUpdateSystem.CreateWave(players[0].x, HorzDir.Right);
+		}
+
+		if (Input.GetKeyDown(KeyCode.D)) {
+			gameManager.waveUpdateSystem.CreateWave(players[1].x, HorzDir.Left);
 		}
 
 		for (var i = 0; i < players.Length; ++i) {
