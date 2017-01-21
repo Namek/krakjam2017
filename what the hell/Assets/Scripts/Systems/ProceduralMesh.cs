@@ -21,24 +21,27 @@ public class ProceduralMesh : MonoBehaviour
         //GetComponent<MeshFilter>().mesh= mesh;
         mesh = GetComponent<MeshFilter>().mesh;
         mesh.MarkDynamic();
+
     }
 
     public void Start()
     {
         MakeMesh();
+
     }
 
     void MakeMesh() {
         vertexHorizontalDistance = 1f / (float)resolution;
         triangles = new int[(fieldLenght*resolution -1)*12];
-        float currentXvalue = 0;
-        int triangleIndexCounter = 0;
+		float currentXvalue = 0;
+		int triangleIndexCounter = 0;
+		int uvIndexCounter = 0;
         int vertexIndexCounter = 0;
         for (int i = 0; i < fieldLenght*resolution; i++)
         {
             vertices.Add(new Vector3(currentXvalue, 0, 0));//vertexIndexCounter
             vertices.Add(new Vector3(currentXvalue, 1, 0));//vertexIndexCounter+1
-            vertices.Add(new Vector3(currentXvalue, 2, 0));//vertexIndexCounter+2
+			vertices.Add(new Vector3(currentXvalue, 2, 0));//vertexIndexCounter+2
 
             botIndexVertexList.Add(vertexIndexCounter);
             midIndexVertexList.Add(vertexIndexCounter+1);
@@ -52,7 +55,7 @@ public class ProceduralMesh : MonoBehaviour
 
                 triangles[triangleIndexCounter+3] = vertexIndexCounter-2;//1
                 triangles[triangleIndexCounter+4] = vertexIndexCounter+1;//4
-                triangles[triangleIndexCounter + 5] = vertexIndexCounter;//3
+				triangles[triangleIndexCounter + 5] = vertexIndexCounter;//3
 
                 triangles[triangleIndexCounter + 6] = vertexIndexCounter-1;//2
                 triangles[triangleIndexCounter + 7] = vertexIndexCounter+1;//4
@@ -62,13 +65,19 @@ public class ProceduralMesh : MonoBehaviour
                 triangles[triangleIndexCounter + 10] = vertexIndexCounter+2;//5
                 triangles[triangleIndexCounter + 11] = vertexIndexCounter+1;//4
 
+
                 triangleIndexCounter += 12;
             }
             vertexIndexCounter += 3;
             currentXvalue += vertexHorizontalDistance;
-        }
-
-        
+			uvIndexCounter += 3;
+		}
+		Vector2[] uvs = new Vector2[vertices.Count];
+		for (int i = 0; i < vertices.Count; i++) {
+			uvs[i]=new Vector2(vertices[i].x/(float)fieldLenght,vertices[i].y/2f);
+		}
+		mesh.SetVertices(vertices);
+		mesh.uv = uvs;
 
     }
     public AnimationCurve mockWave;
