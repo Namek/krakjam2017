@@ -22,7 +22,7 @@ public class WaveUpdateSystem {
 	}										  
 	
 
-	public void Update(PlayerState[] playerStates, float deltaTime) {
+	public void Update(PlayerState[] playersStates, float deltaTime) {
 		foreach (var wave in wavesToAdd) {
 			waves.Add(wave);
 		}
@@ -61,7 +61,7 @@ public class WaveUpdateSystem {
 			}
 		}
 
-		// detect collisions between them
+		// detect collisions between waves
 		for (int i = 0; i < waves.Count; ++i) {
 			for (int j = 1; j < waves.Count; ++j) {
 				if (i == j)
@@ -127,6 +127,30 @@ public class WaveUpdateSystem {
 				--i;
 			}
 		}
+
+		// maybe some wave will take the player with it...
+		foreach (var player in playersStates) {
+			if (player.isCapturedByWave)
+				continue;
+
+			float closestDist = float.MaxValue;
+			WaveState closestWave = null;
+
+			foreach (var wave in waves) {
+				float dist = Math.Abs(wave.xCenter - player.x);
+
+				if (dist < closestDist) {
+					// TODO
+					//closestDist = dist;
+					//closestWave = wave;
+				}
+			}
+
+			if (closestWave != null) {
+				eventHandlerManager.globalBroadcast(null, eventChannels.inGame, (int)inGameChannelEvents.playerHitByWave, player);
+				continue;
+			}
+		}
 	}
 
 	public void PushDown(float x, HorzDir preferredPushDir) {
@@ -146,38 +170,42 @@ public class WaveUpdateSystem {
 			}
 		}
 
-		if (closestWave == null)
-			return;
-
-		// detect collision region: front/back/center
-		float width = calcWaveWidth(closestWave);
-		float topWidth2 = WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN * width / 2;
-
-		// stepped on the tight center, make it faster and push backwards!
-		// ... and make it little bigger
-		bool didHitTightCenter = Math.Abs(x - closestWave.xCenter) <= topWidth2;
-		HorzDir pushDir = preferredPushDir;
-
-		if (didHitTightCenter) {
-			closestWave.speed *= WAVE_SPEEDUP_FACTOR;
-			closestWave.altitude = Math.Min(
-				closestWave.altitude * WAVE_ALTITUDE_GROW_FACTOR,
-				WAVE_MAX_ALTITUDE
-			);
+		if (closestWave == null) {
+			// create new wave
+			this.CreateWave(x, preferredPushDir);
 		}
+
 		else {
-			// stepped on the left, push to the right
-			if (x < closestWave.xCenter) {
-				pushDir = HorzDir.Right;
+			// detect collision region: front/back/center
+			float width = calcWaveWidth(closestWave);
+			float topWidth2 = WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN * width / 2;
+
+			// stepped on the tight center, make it faster and push backwards!
+			// ... and make it little bigger
+			bool didHitTightCenter = Math.Abs(x - closestWave.xCenter) <= topWidth2;
+			HorzDir pushDir = preferredPushDir;
+
+			if (didHitTightCenter) {
+				closestWave.speed *= WAVE_SPEEDUP_FACTOR;
+				closestWave.altitude = Math.Min(
+					closestWave.altitude * WAVE_ALTITUDE_GROW_FACTOR,
+					WAVE_MAX_ALTITUDE
+				);
+			}
+			else {
+				// stepped on the left, push to the right
+				if (x < closestWave.xCenter) {
+					pushDir = HorzDir.Right;
+				}
+
+				// stepped on the right, push to the left
+				else if (x > closestWave.xCenter) {
+					pushDir = HorzDir.Left;
+				}
 			}
 
-			// stepped on the right, push to the left
-			else if (x > closestWave.xCenter) {
-				pushDir = HorzDir.Left;
-			}
+			closestWave.horzDir = pushDir;
 		}
-
-		closestWave.horzDir = pushDir;
 	}
 
 	public void CreateWave(float xCenterOnStart, HorzDir dir) {

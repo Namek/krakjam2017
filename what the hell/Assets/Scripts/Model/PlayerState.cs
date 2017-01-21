@@ -7,6 +7,7 @@ public class PlayerState {
     public float speed;
 	public int id;
 	public HorzDir playerHousePosition;
+	public bool isCapturedByWave = false;
 
 	public PlayerState(int id) {
 		this.id = id;
