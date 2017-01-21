@@ -53,6 +53,7 @@ public class PlayerUpdateSystem {
 
 			// detect player-wave
 			if (player.y <= waveHeight) {
+				gameManager.waveUpdateSystem.PushDown(player.x);
 			}
 
 			// otherwise, detect player-floor

@@ -105,6 +105,11 @@ public class WaveUpdateSystem {
 		wavesToAdd.Clear();
 	}
 
+	public void PushDown(float x) {
+		// TODO
+
+	}
+
 	public void CreateWave(float xLeftOnStart, WaveState.HorzDir dir) {
 		var wave = new WaveState();
 		wave.xCenterOnStart = xLeftOnStart;
