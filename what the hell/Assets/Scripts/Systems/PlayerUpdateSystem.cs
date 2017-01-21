@@ -57,7 +57,7 @@ public class PlayerUpdateSystem {
 			// detect player-wave
 			if (player.y <= waveHeight) {
 				var preferredWavePushDir = player.playerHousePosition == HorzDir.Left ? HorzDir.Right : HorzDir.Left;
-				gameManager.waveUpdateSystem.PushDown(player.x, preferredWavePushDir);
+				//gameManager.waveUpdateSystem.PushDown(player.x, preferredWavePushDir);
 			}
 
 			// otherwise, detect player-floor

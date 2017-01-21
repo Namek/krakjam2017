@@ -36,13 +36,6 @@ public class WaveUpdateSystem {
 		}
 		wavesToRemove.Clear();
 
-		// detect wave collision on players
-		foreach (var p in playerStates) {
-			foreach (var wave in waves) {
-				// TODO
-			}
-		}
-
 		// detect collisions between them
 		foreach (var wave1 in waves) {
 			foreach (var wave2 in waves) {
