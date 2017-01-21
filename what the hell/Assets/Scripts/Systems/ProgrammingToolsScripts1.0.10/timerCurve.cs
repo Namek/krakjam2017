@@ -25,6 +25,7 @@ public class timerCurve
     //tempo allo start
     protected float StartTime = 0f;
     public virtual float CurrentTime { get { return currentTimeSinceStart; } }
+    public virtual float CurrentPercent { get { return currentTimeSinceStart/timeToMax; } }
     //curva da utilizzare
     public AnimationCurve controlledFactor;
     [SerializeField]

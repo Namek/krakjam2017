@@ -5,6 +5,17 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     [SerializeField]
+    Animator animatorControl;
+    [SerializeField]
+    string  startChargingTrigger;
+    [SerializeField]
+    string unleashTrigger;
+    [SerializeField]
+    string jumpCompletionValueName;
+    [SerializeField]
+    string horizontalSpeedValueName;
+
+    [SerializeField]
     timerCurve jumpHeightCurve;
     [SerializeField]
     AnimationCurve accelerationCurve;
@@ -25,6 +36,9 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     [Range(0.1f,1)]
     float minJumpPower;
+
+    bool chargingWasSet = false;
+
     public void Start()
     {
         jumpHeightCurve.setOver();
@@ -32,12 +46,19 @@ public class CharacterController : MonoBehaviour
     }
 
     public void StartAccumulatingJumpPower() {
-        Debug.Log("StartAccumulatingJumpPower");
+        //Debug.Log("StartAccumulatingJumpPower");
+        animatorControl.SetTrigger(startChargingTrigger);
+        chargingWasSet = true;
         startAccumulatoinJumpPowerTime = Time.time;
     }
     public bool KeepAccumulatingJumpPower()
     {
-        Debug.Log("KeepAccumulatingJumpPower");
+        if(!chargingWasSet)
+        {
+            animatorControl.SetTrigger(startChargingTrigger);
+            chargingWasSet = true;
+        }
+        //Debug.Log("KeepAccumulatingJumpPower");
         return Time.time - startAccumulatoinJumpPowerTime < maxAccumulatoinJumpPowerTime;
     }
     public bool IsJumping()
@@ -46,8 +67,10 @@ public class CharacterController : MonoBehaviour
     }
     public void Jump()
     {
-        Debug.Log("Jump");
-        if (jumpHeightCurve.isOver) {
+        if (jumpHeightCurve.isOver)
+        {
+            //Debug.Log("Jump");
+            animatorControl.SetTrigger(unleashTrigger);
             float accumulation = Mathf.Clamp( Time.time - startAccumulatoinJumpPowerTime, 0, maxAccumulatoinJumpPowerTime);
             float jumpPowerCoefficient = Mathf.Clamp( accumulation/ maxAccumulatoinJumpPowerTime , minJumpPower,1);
             jumpHeightCurve.Reset();
@@ -56,6 +79,9 @@ public class CharacterController : MonoBehaviour
                 jumpHeightCurve.refreshTime();
                 transform.position = new Vector3(transform.position.x, jumpHeightCurve.CurrentValue*jumpMaxHeight*jumpPowerCoefficient, transform.position.z);
                 startAccumulatoinJumpPowerTime = Time.time;
+                animatorControl.SetFloat(jumpCompletionValueName, jumpHeightCurve.CurrentPercent);
+                if(jumpHeightCurve.CurrentPercent>=.9f)
+                    chargingWasSet = false;
             }, delegate () { return !jumpHeightCurve.isOver; });
         }
     }
@@ -70,9 +96,9 @@ public class CharacterController : MonoBehaviour
     }
 
     void updateXposition() {
-
+        animatorControl.SetFloat(horizontalSpeedValueName, currentSpeed);
         //update pos
-        transform.position += Vector3.right * accelerationCurve.Evaluate(Mathf.Clamp01(Mathf.Abs( currentSpeed))) * movementSpeed * (currentSpeed > 0 ? 1 : -1);
+        transform.position += Vector3.right * accelerationCurve.Evaluate(Mathf.Clamp01(Mathf.Abs(currentSpeed))) * movementSpeed * (currentSpeed > 0 ? 1 : -1);
 
         //dampen current speed
         if (isDecelerating)
