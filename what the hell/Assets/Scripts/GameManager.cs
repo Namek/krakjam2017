@@ -28,21 +28,29 @@ public class GameManager : MonoBehaviour
     Transform[] characters;
 
     gameState gamePhase;
-    public gameState GamePhase { get { return gamePhase; } set {
+    public gameState GamePhase { get { return gamePhase; } set
+        {
+            gamePhase = value;
             switch (value)
             {
                 case gameState.mainMenu: eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameReset, null);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openMainMenu, null);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.closeEndMenu, null);
+
                     break;
                 case gameState.game:
                     eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameStart, null);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.closeMainMenu, null);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openGameUI, null);
                     break;
                 case gameState.endGameMenu:
                     eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameOver, playerBaseHealth);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.closeGameUI, null);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openEndMenu, null);
                     break;
                 default:
                     break;
             }
-            gamePhase = value;
         } }
     public float laneWidth {
 		get { return laneRight - laneLeft; }
@@ -52,26 +60,29 @@ public class GameManager : MonoBehaviour
 	void Awake() {
         eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, onBaseHit );
         eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.gameStart, onGameStart );
-		waveUpdateSystem = new WaveUpdateSystem(this);
+        
+        waveUpdateSystem = new WaveUpdateSystem(this);
 		playerUpdateSystem = new PlayerUpdateSystem(this, characters,waveUpdateSystem, refractaryCollisionPeriod,refractaryCollisionDistance );
 		proceduralMesh.fieldLenght = (int)laneWidth;
         inputManager.Initialize(characters);
 
     }
-
+    void Start() {
+        eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openMainMenu, null);
+    }
 	void Update() {
         RenderWave();
         switch (gamePhase)
         {
             case gameState.mainMenu:
-                    inputManager.waitForStart(this);
+                inputManager.waitForStart(this);
                 break;
             case gameState.game:
-                    inputManager.UpdateCharacterMovements();
-		            playerUpdateSystem.Update(Time.time,Time.deltaTime);
+                inputManager.UpdateCharacterMovements();
+		        playerUpdateSystem.Update(Time.time,Time.deltaTime);
                 break;
             case gameState.endGameMenu:
-                    inputManager.waitForRestart(this);
+                inputManager.waitForRestart(this);
                 break;
             default:
                 break;
@@ -98,7 +109,7 @@ public class GameManager : MonoBehaviour
             WaveState w = o as WaveState;
             playerBaseHealth[(int)w.horzDir] -= w.altitude * damageFactor;
             if (playerBaseHealth[(int)w.horzDir] <= 0)
-                gamePhase = gameState.endGameMenu;
+                GamePhase = gameState.endGameMenu;
 
         }
     }
