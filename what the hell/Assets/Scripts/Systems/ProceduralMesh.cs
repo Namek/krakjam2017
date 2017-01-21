@@ -78,8 +78,9 @@ public class ProceduralMesh : MonoBehaviour
         for (int i = 0; i < fieldLenght* resolution; i++)
         {
             float mockx = ((float) currentXvalue) / (float)fieldLenght;//normally: getHeight((float) currentXvalue) instead of mockWave.Evaluate(mockx)
-            vertices[topIndexVertexList[i]] = Vector3.right * i * vertexHorizontalDistance + Vector3.up *mockWave.Evaluate(mockx) ;
-            vertices[midIndexVertexList[i]] = Vector3.right * i * vertexHorizontalDistance + Vector3.up *Mathf.Max (0, mockWave.Evaluate(mockx)- topQuadHeight);
+			float y = waveSystem.getWaveHeight((float) currentXvalue);
+            vertices[topIndexVertexList[i]] = Vector3.right * i * vertexHorizontalDistance + Vector3.up *y ;
+            vertices[midIndexVertexList[i]] = Vector3.right * i * vertexHorizontalDistance + Vector3.up *Mathf.Max (0, y - topQuadHeight);
             currentXvalue += vertexHorizontalDistance;
         }
 

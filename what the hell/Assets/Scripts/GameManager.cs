@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour {
 	// updatables
 	PlayerUpdateSystem playerUpdateSystem;
 	public WaveUpdateSystem waveUpdateSystem;
+	
+	[SerializeField]
+	ProceduralMesh proc;
 
 
 	public float laneWidth {
@@ -22,13 +25,14 @@ public class GameManager : MonoBehaviour {
 	void Awake() {
 		playerUpdateSystem = new PlayerUpdateSystem(this);
 		waveUpdateSystem = new WaveUpdateSystem(this);
-
+		proc.fieldLenght = (int)laneWidth;
 
 	}
 
 	void Update() {
 		playerUpdateSystem.Update(Time.deltaTime);
 		waveUpdateSystem.Update(playerUpdateSystem.players, Time.deltaTime);
+		proc.UpdateMesh(waveUpdateSystem);
 	}
 }
 
