@@ -10,7 +10,7 @@ public class WaveUpdateSystem {
 	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.1f;
 	private const float WAVE_MAX_ALTITUDE = 10;
 	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
-	private const float WAVE_DEFAULT_SPEED = 8f;
+	private const float WAVE_DEFAULT_SPEED = 12f;
 
 	GameManager gameManager;
 
@@ -177,7 +177,7 @@ public class WaveUpdateSystem {
 		}
 	}
 
-	public bool PushDown(float x, HorzDir preferredPushDir) {
+	public bool PushDown(float x, HorzDir preferredPushDir, float speed) {
 		bool anyReaction = false;
 		WaveState closestWave = null;
 		float highestAltitude = 0;

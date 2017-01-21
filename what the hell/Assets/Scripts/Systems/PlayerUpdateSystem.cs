@@ -77,7 +77,7 @@ public class PlayerUpdateSystem {
                     //Debug.Log("Porcaputtana "+existingCollisions);
                     //existingCollisions.PrintToLog(currentTime+" legit collision mammt");
                     Debug.Log("OnPushDown");
-					waveSystem.PushDown(player.x, getPreferredPush(player));
+					waveSystem.PushDown(player.x, getPreferredPush(player), playerBeforeUpdate.y -player.y);
                     existingCollisions.Add(new PlayerFluidCollision() {
                         player=player, collisionTime=currentTime, collisionPosition=player.transform.position
                     });
