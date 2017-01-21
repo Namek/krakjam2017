@@ -56,6 +56,7 @@
      <Compile Include="Assets\EventSystem.1.0.3\Utility\EventUtility.cs" />
      <Compile Include="Assets\EventSystem.1.0.3\Utility\GarbagelessList.cs" />
      <Compile Include="Assets\EventSystem.1.0.3\Utility\test.cs" />
+     <Compile Include="Assets\Lava_Flowing_Shader\Scripts\ScrollingUVs_Layers.cs" />
      <Compile Include="Assets\ProgrammingToolsScripts1.0.10\UnicqueCoroutine.cs" />
      <Compile Include="Assets\ProgrammingToolsScripts1.0.10\UtilityMods.cs" />
      <Compile Include="Assets\ProgrammingToolsScripts1.0.10\timerCurve.cs" />
@@ -71,9 +72,11 @@
      <Compile Include="Assets\Scripts\Systems\PlayerUpdateSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\ProceduralMesh.cs" />
      <Compile Include="Assets\Scripts\Systems\WaveUpdateSystem.cs" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
+     <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Simple.shader" />
+     <None Include="Assets\Lava_Flowing_Shader\Shaders\Diffuse_Lava_Distort.shader" />
+     <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort.shader" />
+     <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort_Transparent.shader" />
+     <None Include="Assets\Lava_Flowing_Shader\ReadMe.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -88,9 +91,6 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Purchasing">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
