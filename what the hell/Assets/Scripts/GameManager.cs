@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
-    public float[] playerBaseHealth;
+public class GameManager : MonoBehaviour
+{
+    public float[] startingPlayerBaseHealth;
+    float[] playerBaseHealth= new float[2];
 
     // data
     public float damageFactor = 1f;
@@ -26,7 +28,7 @@ public class GameManager : MonoBehaviour {
     Transform[] characters;
 
     gameState gamePhase;
-    public gameState GamePhase { get { return gamePhase; } private set {
+    public gameState GamePhase { get { return gamePhase; } set {
             switch (value)
             {
                 case gameState.mainMenu: eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameReset, null);
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour {
                     eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameStart, null);
                     break;
                 case gameState.endGameMenu:
-                    eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameOver, null);
+                    eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameOver, playerBaseHealth);
                     break;
                 default:
                     break;
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour {
 
 	void Awake() {
         eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, onBaseHit );
+        eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.gameStart, onGameStart );
 		waveUpdateSystem = new WaveUpdateSystem(this);
 		playerUpdateSystem = new PlayerUpdateSystem(this, characters,waveUpdateSystem, refractaryCollisionPeriod,refractaryCollisionDistance );
 		proceduralMesh.fieldLenght = (int)laneWidth;
@@ -57,16 +60,47 @@ public class GameManager : MonoBehaviour {
     }
 
 	void Update() {
-		waveUpdateSystem.Update(playerUpdateSystem.players, Time.deltaTime);
-		proceduralMesh.UpdateMesh(waveUpdateSystem);
-        inputManager.UpdateCharacterMovements();
-		playerUpdateSystem.Update(Time.time,Time.deltaTime);
+        RenderWave();
+        switch (gamePhase)
+        {
+            case gameState.mainMenu:
+                    inputManager.waitForStart(this);
+                break;
+            case gameState.game:
+                    inputManager.UpdateCharacterMovements();
+		            playerUpdateSystem.Update(Time.time,Time.deltaTime);
+                break;
+            case gameState.endGameMenu:
+                    inputManager.waitForRestart(this);
+                break;
+            default:
+                break;
+        }
+
 	}
 
+    void RenderWave()
+    {
+        waveUpdateSystem.Update(playerUpdateSystem.players, Time.deltaTime);
+        proceduralMesh.UpdateMesh(waveUpdateSystem);
+    }
+    void onGameStart(object o)
+    {
+        for (int i = 0; i < startingPlayerBaseHealth.Length; i++)
+        {
+            playerBaseHealth[i] = startingPlayerBaseHealth[i];
+        }
+    }
     void onBaseHit(object o)
     {
-        WaveState w = o as WaveState;
-        playerBaseHealth[(int)w.horzDir] -= w.altitude * damageFactor;
+        if(gamePhase==gameState.game)
+        { 
+            WaveState w = o as WaveState;
+            playerBaseHealth[(int)w.horzDir] -= w.altitude * damageFactor;
+            if (playerBaseHealth[(int)w.horzDir] <= 0)
+                gamePhase = gameState.endGameMenu;
+
+        }
     }
 
     public enum gameState {

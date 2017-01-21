@@ -19,9 +19,26 @@ public class InputManager : MonoBehaviour {
             jumping[i] = characters[i].Jump;
         }
 	}
-	
-	// Update is called once per frame
-	public void UpdateCharacterMovements () {
+
+    public void waitForStart(GameManager manager)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (Input.GetButtonDown(InputNames.Submit.P(i + 1)))
+                manager.GamePhase = GameManager.gameState.game;
+        }
+    }
+    public void waitForRestart(GameManager manager)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (Input.GetButtonDown(InputNames.Submit.P(i + 1)))
+                manager.GamePhase = GameManager.gameState.mainMenu;
+        }
+    }
+
+    // Update is called once per frame
+    public void UpdateCharacterMovements () {
         /*
         if (Input.GetButtonDown(InputNames.Fire1.P(1)))
         {
