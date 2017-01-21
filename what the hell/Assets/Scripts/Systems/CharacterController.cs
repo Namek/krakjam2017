@@ -9,11 +9,9 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     ParticleSystem auraParticle;
     [SerializeField]
-    string  startChargingTrigger;
+    string  startJumpTrigger;
     [SerializeField]
-    string unleashTrigger;
-    [SerializeField]
-    string jumpCompletionValueName;
+    string heightValueName;
     [SerializeField]
     string horizontalSpeedValueName;
     
@@ -58,6 +56,7 @@ public class CharacterController : MonoBehaviour
         }
     }
     void initJump() {
+        animatorControl.SetTrigger(startJumpTrigger);
         jumpOnce = true;
         jumpStartTime = Time.time;
         verticalSpeed = 0;
@@ -65,7 +64,8 @@ public class CharacterController : MonoBehaviour
     }
     public bool KeepAccumulatingJumpPower()
     {
-        //power up jump
+        if (!IsJumping())
+            initJump();
 
         //showAccumulation();
         if (Time.time - jumpStartTime < jumpMaxPowerupDuration)
@@ -96,16 +96,11 @@ public class CharacterController : MonoBehaviour
     void updateYposition() {
         if (IsJumping())
         {
-            transform.position = new Vector3(transform.position.x,
-                Mathf.Max(startingHeight, transform.position.y + verticalSpeed)
-                , transform.position.z);
+            float newHeight = Mathf.Max(startingHeight, transform.position.y + verticalSpeed);
+            transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
+            animatorControl.SetFloat(heightValueName, newHeight);
             if (enableGravity)
                 verticalSpeed -= jumpGravity * Time.deltaTime;
-            //animatorControl.SetFloat(jumpCompletionValueName, jumpCurvePercent);
-        }
-        else
-        {
-            initJump();
         }
     }
 
