@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
     MoveFunction[] movement= new MoveFunction[2];
-    JumpFunction[] jumpingExecutor = new JumpFunction[2];
     CanKeepAccumulating[] jumpAccumulationChecker = new CanKeepAccumulating[2];
     StartAccumulatePowerFunction[] startAccumulating = new StartAccumulatePowerFunction[2];
+    StopAccumulatePowerFunction[] stopAccumulating = new StopAccumulatePowerFunction[2];
     IsJumping[] isJumping = new IsJumping[2];
 
     // Use this for initialization
@@ -19,9 +19,9 @@ public class InputManager : MonoBehaviour {
         for (int i = 0; i < 2; i++)
         {
             movement[i] = characters[i].Move;
-            jumpingExecutor[i] = characters[i].Jump;
             jumpAccumulationChecker[i] = characters[i].KeepAccumulatingJumpPower;
             startAccumulating[i] = characters[i].StartAccumulatingJumpPower;
+            stopAccumulating[i] = characters[i].StopAccumulatingJumpPower;
             isJumping[i]= characters[i].IsJumping;
         }
 	}
@@ -78,14 +78,12 @@ public class InputManager : MonoBehaviour {
             {
                 if(!jumpAccumulationChecker[i]())
                 {
-                    if (!isJumping[i]())
-                        jumpingExecutor[i]();
+                        stopAccumulating[i]();
                 }
             }
             if (Input.GetButtonUp(InputNames.Fire1.P(i + 1)))
             {
-                if(!isJumping[i]())
-                    jumpingExecutor[i]();
+                stopAccumulating[i]();
             }
 
         }
@@ -94,6 +92,6 @@ public class InputManager : MonoBehaviour {
 }
 public delegate void MoveFunction(float xSpeed);
 public delegate void StartAccumulatePowerFunction();
-public delegate void JumpFunction();
+public delegate void StopAccumulatePowerFunction();
 public delegate bool CanKeepAccumulating();
 public delegate bool IsJumping();

@@ -7,6 +7,8 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     Animator animatorControl;
     [SerializeField]
+    ParticleSystem auraParticle;
+    [SerializeField]
     string  startChargingTrigger;
     [SerializeField]
     string unleashTrigger;
@@ -14,9 +16,7 @@ public class CharacterController : MonoBehaviour
     string jumpCompletionValueName;
     [SerializeField]
     string horizontalSpeedValueName;
-
-    [SerializeField]
-    timerCurve jumpHeightCurve;
+    
     [SerializeField]
     AnimationCurve accelerationCurve;
     [SerializeField]
@@ -27,65 +27,87 @@ public class CharacterController : MonoBehaviour
     float movementSpeed;
     float currentSpeed;
     float lastAccelerationTime;
-    [SerializeField]
-    float jumpMaxHeight;
-    bool isDecelerating;
-    float startAccumulatoinJumpPowerTime;
-    [SerializeField]
-    float maxAccumulatoinJumpPowerTime;
-    [SerializeField]
-    [Range(0.1f,1)]
-    float minJumpPower;
 
-    bool chargingWasSet = false;
+    [SerializeField]
+    float jumpMaxPowerupDuration;
+    float jumpStartTime;
+    float verticalSpeed;
+    bool isDecelerating;
+    [SerializeField]
+    [Range(0.1f, 1)]
+    float jumpAcceleration;
+    [SerializeField]
+    float jumpGravity;
+    [SerializeField]
+    float minJumpDuration;
+
+    bool jumpOnce = false;
+    bool enableGravity;
 
     public void Start()
     {
-        jumpHeightCurve.setOver();
         startingHeight = transform.position.y;
     }
 
     public void StartAccumulatingJumpPower() {
-        //Debug.Log("StartAccumulatingJumpPower");
-        animatorControl.SetTrigger(startChargingTrigger);
-        chargingWasSet = true;
-        startAccumulatoinJumpPowerTime = Time.time;
+        //start jump
+        Debug.Log("StartAccumulatingJumpPower "+ IsJumping());
+        if (!jumpOnce)
+        {
+            initJump();
+        }
+    }
+    void initJump() {
+        jumpOnce = true;
+        jumpStartTime = Time.time;
+        verticalSpeed = 0;
+        enableGravity = false;
     }
     public bool KeepAccumulatingJumpPower()
     {
-        if(!chargingWasSet)
-        {
-            animatorControl.SetTrigger(startChargingTrigger);
-            chargingWasSet = true;
-        }
+        //power up jump
+
+        //showAccumulation();
+        if (Time.time - jumpStartTime < jumpMaxPowerupDuration)
+            verticalSpeed += jumpAcceleration*Time.deltaTime;
         //Debug.Log("KeepAccumulatingJumpPower");
-        return Time.time - startAccumulatoinJumpPowerTime < maxAccumulatoinJumpPowerTime;
+        return Time.time - jumpStartTime < jumpMaxPowerupDuration;
     }
+    //void showAccumulation() {
+    //}
     public bool IsJumping()
     {
-        return !jumpHeightCurve.isOver;
-    }
-    public void Jump()
-    {
-        if (jumpHeightCurve.isOver)
-        {
-            //Debug.Log("Jump");
-            animatorControl.SetTrigger(unleashTrigger);
-            float accumulation = Mathf.Clamp( Time.time - startAccumulatoinJumpPowerTime, 0, maxAccumulatoinJumpPowerTime);
-            float jumpPowerCoefficient = Mathf.Clamp( accumulation/ maxAccumulatoinJumpPowerTime , minJumpPower,1);
-            jumpHeightCurve.Reset();
-            UniqueCoroutine.doUntil(this, delegate ()
-            {
-                jumpHeightCurve.refreshTime();
-                transform.position = new Vector3(transform.position.x, jumpHeightCurve.CurrentValue*jumpMaxHeight*jumpPowerCoefficient, transform.position.z);
-                startAccumulatoinJumpPowerTime = Time.time;
-                animatorControl.SetFloat(jumpCompletionValueName, jumpHeightCurve.CurrentPercent);
-                if(jumpHeightCurve.CurrentPercent>=.9f)
-                    chargingWasSet = false;
-            }, delegate () { return !jumpHeightCurve.isOver; });
-        }
+        return (transform.position.y>startingHeight ||verticalSpeed>0);
     }
 
+    public void StopAccumulatingJumpPower() {
+        if (Time.time - jumpStartTime > minJumpDuration)
+            enableGravity = true;
+        else
+            UniqueCoroutine.UCoroutine(this, doMinimumJump(), "mammt");
+    }
+    IEnumerator doMinimumJump() {
+        while (Time.time - jumpStartTime < minJumpDuration)
+        { yield return new WaitForEndOfFrame();
+            verticalSpeed += jumpAcceleration * Time.deltaTime;
+        }
+        enableGravity = true;
+    }
+    void updateYposition() {
+        if (IsJumping())
+        {
+            transform.position = new Vector3(transform.position.x,
+                Mathf.Max(startingHeight, transform.position.y + verticalSpeed)
+                , transform.position.z);
+            if (enableGravity)
+                verticalSpeed -= jumpGravity * Time.deltaTime;
+            //animatorControl.SetFloat(jumpCompletionValueName, jumpCurvePercent);
+        }
+        else
+        {
+            initJump();
+        }
+    }
 
     public void Move(float xAxisSpeed) {
         currentSpeed = Mathf.Clamp(currentSpeed+ xAxisSpeed *Time.deltaTime,-1,1);
@@ -108,6 +130,13 @@ public class CharacterController : MonoBehaviour
 
     void Update() { 
         updateXposition();
+        updateYposition();
     }
-
+    void activateAura() {
+        auraParticle.Stop();
+        auraParticle.Play();
+    }
+    void stopAura() {
+        auraParticle.Stop();
+    }
 }
