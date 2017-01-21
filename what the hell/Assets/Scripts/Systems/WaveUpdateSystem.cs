@@ -10,7 +10,7 @@ public class WaveUpdateSystem {
 	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.1f;
 	private const float WAVE_MAX_ALTITUDE = 10;
 	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
-	private const float WAVE_DEFAULT_SPEED = 16f;
+	private const float WAVE_DEFAULT_SPEED = 8f;
 
 	GameManager gameManager;
 
@@ -229,12 +229,14 @@ public class WaveUpdateSystem {
 				// stepped on the left, push to the right
 				if (x < closestWave.xCenter) {
 					pushDir = HorzDir.Right;
+					closestWave.speed *= WAVE_SPEEDUP_FACTOR;
 					anyReaction = true;
 				}
 
 				// stepped on the right, push to the left
 				else if (x > closestWave.xCenter) {
 					pushDir = HorzDir.Left;
+					closestWave.speed *= WAVE_SPEEDUP_FACTOR;
 					anyReaction = true;
 				}
 			}
@@ -314,7 +316,7 @@ public class WaveUpdateSystem {
 		var dir = wave1.horzDir;
 
 		newWave.horzDir = wave1.horzDir;
-		newWave.altitude = Mathf.Max(wave1.altitude, wave2.altitude) * (1+Math.Abs(wave2.altitude-wave2.altitude));
+		newWave.altitude = Mathf.Max(wave1.altitude, wave2.altitude) * (1.2f+Math.Abs(wave2.altitude-wave2.altitude)*2);
 		newWave.speed = (wave1.speed + wave2.speed)/2;
 
 		newWave.xCenter = dir == HorzDir.Left && wave1.xCenter < wave2.xCenter
