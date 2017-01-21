@@ -19,6 +19,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     float jumpMaxHeight;
     bool isDecelerating;
+    
     public void Start()
     {
         jumpHeightCurve.setOver();

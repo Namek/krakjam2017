@@ -72,7 +72,7 @@ public class ProceduralMesh : MonoBehaviour
 
     }
     public AnimationCurve mockWave;
-    void UpdateMesh()
+    public void UpdateMesh(WaveUpdateSystem waveSystem)
     {
         float currentXvalue = 0;
         for (int i = 0; i < fieldLenght* resolution; i++)
@@ -87,8 +87,5 @@ public class ProceduralMesh : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
-
-    void Update() {
-        UpdateMesh();
-    }
+    
 }
