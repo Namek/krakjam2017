@@ -175,7 +175,7 @@ public class WaveUpdateSystem {
 	}
 
 	private static bool isPointInWaveRegion(WaveState wave, float x) {
-		float width2 = calcWaveWidth(wave);
+		float width2 = calcWaveWidth(wave)/2f;
 		return x > (wave.xCenter - width2) && x < (wave.xCenter + width2);
 	}
 

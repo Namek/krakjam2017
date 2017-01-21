@@ -8,31 +8,39 @@ public class GameManager : MonoBehaviour {
 	// data
 	public float laneLeft = 0;
 	public float laneRight = 100;
+    public float refractaryCollisionPeriod;
+    public float refractaryCollisionDistance;
 
-	// updatables
-	PlayerUpdateSystem playerUpdateSystem;
+    // updatables
+    PlayerUpdateSystem playerUpdateSystem;
 	public WaveUpdateSystem waveUpdateSystem;
-	
-	[SerializeField]
-	ProceduralMesh proc;
+
+    [SerializeField]
+    ProceduralMesh proceduralMesh;
+    [SerializeField]
+    InputManager inputManager;
+    [SerializeField]
+    Transform[] characters;
 
 
-	public float laneWidth {
+    public float laneWidth {
 		get { return laneRight - laneLeft; }
 	}
 
 
 	void Awake() {
-		playerUpdateSystem = new PlayerUpdateSystem(this);
 		waveUpdateSystem = new WaveUpdateSystem(this);
-		proc.fieldLenght = (int)laneWidth;
+		playerUpdateSystem = new PlayerUpdateSystem(this, characters,waveUpdateSystem, refractaryCollisionPeriod,refractaryCollisionDistance );
+		proceduralMesh.fieldLenght = (int)laneWidth;
+        inputManager.Initialize(characters);
 
-	}
+    }
 
 	void Update() {
-		playerUpdateSystem.Update(Time.deltaTime);
 		waveUpdateSystem.Update(playerUpdateSystem.players, Time.deltaTime);
-		proc.UpdateMesh(waveUpdateSystem);
+		proceduralMesh.UpdateMesh(waveUpdateSystem);
+        inputManager.UpdateCharacterMovements();
+		playerUpdateSystem.Update(Time.time,Time.deltaTime);
 	}
 }
 

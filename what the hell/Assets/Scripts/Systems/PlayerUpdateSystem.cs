@@ -8,24 +8,36 @@ public class PlayerUpdateSystem {
 	public PlayerState[] players;
 	private PlayerState[] playersBeforeUpdate;
 
-	private List<PlayerWaveCollision> existingCollisions = new List<PlayerWaveCollision>();
-
+	private List<PlayerFluidCollision> existingCollisions = new List<PlayerFluidCollision>();
+    float refractaryCollisionPeriod;
+    float refractaryCollisionDistance;
 	GameManager gameManager;
+    WaveUpdateSystem waveSystem;
 
-
-	public PlayerUpdateSystem(GameManager gameManager) {
+	public PlayerUpdateSystem(
+        GameManager gameManager, 
+        Transform[] playerTransforms, 
+        WaveUpdateSystem waveSystem,
+        float refractaryCollisionPeriod,
+        float refractaryCollisionDistance
+        ) {
 		this.gameManager = gameManager;
+        this.waveSystem = waveSystem;
 
 		players = new PlayerState[] {
-			new PlayerState(1).setHouse(HorzDir.Left).setX(gameManager.laneLeft + 1),
-			new PlayerState(2).setHouse(HorzDir.Right).setX(gameManager.laneRight - 1)
-		};
+			new PlayerState(0).setHouse(HorzDir.Left).setTransform(playerTransforms[0]).refreshPositionData(),
+			new PlayerState(1).setHouse(HorzDir.Right).setTransform(playerTransforms[1]).refreshPositionData()
+        };
 		playersBeforeUpdate = new PlayerState[players.Length];
 		for (var i = 0; i < players.Length; ++i) {
 			playersBeforeUpdate[i] = new PlayerState(players[i].id);
 		}
 		rememberPlayerStates();
-	}			
+
+        this.refractaryCollisionPeriod = refractaryCollisionPeriod;
+        this.refractaryCollisionDistance = refractaryCollisionDistance;
+
+    }			
 	
 	private void rememberPlayerStates() {
 		for (var i = 0; i < players.Length; ++i) {
@@ -33,47 +45,60 @@ public class PlayerUpdateSystem {
 		}
 	}									   
 
-	public void Update(float deltaTime) {
-		rememberPlayerStates();
+	public void Update(float currentTime, float deltaTime) {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            waveSystem.CreateWave(players[1].x, HorzDir.Right);
+        }
+        var _player = players[1].refreshPositionData();
+        var _playerBeforeUpdate = playersBeforeUpdate[0];
+        var _waveHeight = waveSystem.getWaveHeight(_player.x);
+        rememberPlayerStates();
+        forgetOldCollisions(currentTime);
 
-		if (Input.GetKeyDown(KeyCode.A)) {
-			gameManager.waveUpdateSystem.CreateWave(players[0].x, HorzDir.Right);
-		}
 
-		if (Input.GetKeyDown(KeyCode.D)) {
-			gameManager.waveUpdateSystem.CreateWave(players[1].x, HorzDir.Left);
-		}
-
-		for (var i = 0; i < players.Length; ++i) {
-			var player = players[i];
+        for (var i = 0; i < players.Length; ++i) {
+			var player = players[i].refreshPositionData();
 			var playerBeforeUpdate = playersBeforeUpdate[i];
-
-			// 1. update player position based on input
-			// TODO
-
-			// 2. check player whether player collides wave or floor
-			var waveHeight = gameManager.waveUpdateSystem.getWaveHeight(player.x);
-
-			// detect player-wave
-			if (player.y <= waveHeight) {
-				var preferredWavePushDir = player.playerHousePosition == HorzDir.Left ? HorzDir.Right : HorzDir.Left;
-				//gameManager.waveUpdateSystem.PushDown(player.x, preferredWavePushDir);
-			}
-
-			// otherwise, detect player-floor
-
-			if ((playerBeforeUpdate.y - waveHeight) * (player.y - waveHeight) > 0) {
-				// player hit the floor
-				//eventHandlerManager.globalBroadcast(null, eventChannels.inGame, inGameChannelEvents.playerHitByWave)
-				// TODO
+            var waveHeight = waveSystem.getWaveHeight(player.x);
+            
+            if ((playerBeforeUpdate.y - waveHeight) * (player.y - waveHeight) < 0&& player.y<=waveHeight) {
+                bool tooSoon = false;
+                foreach (var item in existingCollisions)
+                {
+                    if (isCollisionTooSoon(item, currentTime, player.id))
+                        tooSoon = true;
+                }
+                if (!tooSoon)
+                {
+                    //legit collision
+                    waveSystem.PushDown(player.x, getPreferredPush(player));
+                }
 			}
 		}
 
 	}
 
+    void forgetOldCollisions(float currentTime) {
+        
+        existingCollisions.RemoveAll(delegate (PlayerFluidCollision item)
+        {
+            return !isCollisionTooSoon(item, currentTime, item.player.id);  
+        });
+    }
+    bool isCollisionTooSoon(PlayerFluidCollision item, float currentTime, int playerId)
+    {
+        return  playerId == item.player.id &&(
+                    (currentTime - item.collisionTime < refractaryCollisionPeriod) ||
+                    ((players[playerId].transform.position - item.collisionPosition).magnitude < refractaryCollisionDistance )
+                );
+    }
 
-	private struct PlayerWaveCollision {
-		PlayerState player;
-		WaveState wave;
+    HorzDir getPreferredPush(PlayerState player) { return player.playerHousePosition == HorzDir.Left ? HorzDir.Right : HorzDir.Left; }
+
+	private struct PlayerFluidCollision {
+		public PlayerState player;
+        public float collisionTime;
+        public Vector3 collisionPosition;
 	}
 }
