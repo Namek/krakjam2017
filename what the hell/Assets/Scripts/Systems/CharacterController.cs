@@ -19,21 +19,43 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     float jumpMaxHeight;
     bool isDecelerating;
-    
+    float startAccumulatoinJumpPowerTime;
+    [SerializeField]
+    float maxAccumulatoinJumpPowerTime;
+    [SerializeField]
+    [Range(0.1f,1)]
+    float minJumpPower;
     public void Start()
     {
         jumpHeightCurve.setOver();
         startingHeight = transform.position.y;
     }
 
+    public void StartAccumulatingJumpPower() {
+        Debug.Log("StartAccumulatingJumpPower");
+        startAccumulatoinJumpPowerTime = Time.time;
+    }
+    public bool KeepAccumulatingJumpPower()
+    {
+        Debug.Log("KeepAccumulatingJumpPower");
+        return Time.time - startAccumulatoinJumpPowerTime < maxAccumulatoinJumpPowerTime;
+    }
+    public bool IsJumping()
+    {
+        return !jumpHeightCurve.isOver;
+    }
     public void Jump()
     {
-        if (jumpHeightCurve.isOver) { 
+        Debug.Log("Jump");
+        if (jumpHeightCurve.isOver) {
+            float accumulation = Mathf.Clamp( Time.time - startAccumulatoinJumpPowerTime, 0, maxAccumulatoinJumpPowerTime);
+            float jumpPowerCoefficient = Mathf.Clamp( accumulation/ maxAccumulatoinJumpPowerTime , minJumpPower,1);
             jumpHeightCurve.Reset();
             UniqueCoroutine.doUntil(this, delegate ()
             {
                 jumpHeightCurve.refreshTime();
-                transform.position = new Vector3(transform.position.x, jumpHeightCurve.CurrentValue*jumpMaxHeight, transform.position.z);
+                transform.position = new Vector3(transform.position.x, jumpHeightCurve.CurrentValue*jumpMaxHeight*jumpPowerCoefficient, transform.position.z);
+                startAccumulatoinJumpPowerTime = Time.time;
             }, delegate () { return !jumpHeightCurve.isOver; });
         }
     }

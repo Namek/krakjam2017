@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
     MoveFunction[] movement= new MoveFunction[2];
-    JumpFunction[] jumping= new JumpFunction[2];
+    JumpFunction[] jumpingExecutor = new JumpFunction[2];
+    CanKeepAccumulating[] jumpAccumulationChecker = new CanKeepAccumulating[2];
+    StartAccumulatePowerFunction[] startAccumulating = new StartAccumulatePowerFunction[2];
+    IsJumping[] isJumping = new IsJumping[2];
 
     // Use this for initialization
     public void Initialize (Transform[] controlledCharacter) {
@@ -16,7 +19,10 @@ public class InputManager : MonoBehaviour {
         for (int i = 0; i < 2; i++)
         {
             movement[i] = characters[i].Move;
-            jumping[i] = characters[i].Jump;
+            jumpingExecutor[i] = characters[i].Jump;
+            jumpAccumulationChecker[i] = characters[i].KeepAccumulatingJumpPower;
+            startAccumulating[i] = characters[i].StartAccumulatingJumpPower;
+            isJumping[i]= characters[i].IsJumping;
         }
 	}
 
@@ -63,10 +69,23 @@ public class InputManager : MonoBehaviour {
         for (int i = 0; i < 2; i++)
         {
             movement[i](Input.GetAxis(InputNames.Horizontal.P(i+1)));
-         
+
             if (Input.GetButtonDown(InputNames.Fire1.P(i + 1)))
             {
-                jumping[i]();
+                startAccumulating[i]();
+            }
+            if (Input.GetButton(InputNames.Fire1.P(i + 1)))
+            {
+                if(!jumpAccumulationChecker[i]())
+                {
+                    if (!isJumping[i]())
+                        jumpingExecutor[i]();
+                }
+            }
+            if (Input.GetButtonUp(InputNames.Fire1.P(i + 1)))
+            {
+                if(!isJumping[i]())
+                    jumpingExecutor[i]();
             }
 
         }
@@ -74,4 +93,7 @@ public class InputManager : MonoBehaviour {
 	}
 }
 public delegate void MoveFunction(float xSpeed);
+public delegate void StartAccumulatePowerFunction();
 public delegate void JumpFunction();
+public delegate bool CanKeepAccumulating();
+public delegate bool IsJumping();
