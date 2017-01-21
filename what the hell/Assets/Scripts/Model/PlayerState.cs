@@ -8,6 +8,7 @@ public class PlayerState {
 	public int id;
 	public HorzDir playerHousePosition;
 	public bool isCapturedByWave = false;
+	public float previousHeightDiff = 0;
 
 	public PlayerState(int id) {
 		this.id = id;
@@ -34,10 +35,11 @@ public class PlayerState {
         return this;
     }
 
-    public PlayerState refreshPositionData()
+    public PlayerState refreshPositionData(float waveHeight)
     {
         this.x = transform.position.x;
         this.y = transform.position.y;
+		this.previousHeightDiff = this.y - waveHeight;
         return this;
     }
 
@@ -48,6 +50,9 @@ public class PlayerState {
         this.y = other.y;
         this.speed = other.speed;
 		this.playerHousePosition = other.playerHousePosition;
+
+		this.previousHeightDiff = other.previousHeightDiff;
+
 	}
 
 }

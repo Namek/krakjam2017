@@ -6,6 +6,7 @@ using System.Text;
 public class WaveState {
 	public float xCenter;
 	public float xCenterOnStart;
+	public float lifeTime = 0;//range: [0, 1]
 	public float altitude;
 	public HorzDir horzDir;
 	public float speed;

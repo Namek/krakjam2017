@@ -26,8 +26,8 @@ public class JoystickButtonDebugger : MonoBehaviour
                 for (int i = 1; i <= playerLimit; i++)
                 {
 
-                    if (Mathf.Abs(Input.GetAxis(item.P(i))) > 0.2f)
-                        Debug.Log("JoystickButtonDebugger: " + item.P(i));
+                    //if (Mathf.Abs(Input.GetAxis(item.P(i))) > 0.2f)
+                      //  Debug.Log("JoystickButtonDebugger: " + item.P(i));
 
                 }
             }

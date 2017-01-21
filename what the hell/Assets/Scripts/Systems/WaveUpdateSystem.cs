@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class WaveUpdateSystem {
 	private const float WAVE_MIN_WIDTH_DIFF_TO_COLLIDE = 0.01f;
-	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.2f;
+	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.4f;
 	private const float WAVE_SPEEDUP_FACTOR = 2f;
 	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.1f;
 	private const float WAVE_MAX_ALTITUDE = 10;
+	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
+	private const float WAVE_DEFAULT_SPEED = 16f;
 
 	GameManager gameManager;
 
@@ -32,6 +34,14 @@ public class WaveUpdateSystem {
 		for (int i = 0; i < waves.Count; ++i) {
 			var wave = waves[i];
 			bool removeMe = false;
+
+			if (wave.lifeTime < 1f) {
+				wave.lifeTime += deltaTime * WAVE_LIFE_TIME_GROW_FACTOR;
+			}
+			else {
+				// a hack to avoid using this later
+				wave.xCenterOnStart = -100000;
+			}
 
 			if (wave.isCollidable) {
 				wave.xCenter += (wave.horzDir == HorzDir.Left ? -1 : 1) * deltaTime * wave.speed;
@@ -66,7 +76,7 @@ public class WaveUpdateSystem {
 
 		// detect collisions between waves
 		for (int i = 0; i < waves.Count; ++i) {
-			for (int j = 1; j < waves.Count; ++j) {
+			for (int j = 1; j < waves.Count; ++j) {  
 				if (i == j)
 					continue;
 
@@ -93,8 +103,14 @@ public class WaveUpdateSystem {
 
 				// 1. same way and overlapped lot enough? Merge them into one stronger wave
 				if (wave1.horzDir == wave2.horzDir) {
+					var diff = wave1.xCenter - wave2.xCenter;
+
+					if (Math.Abs(diff) > 0.2f)
+						continue;
+
 					// nothing will happen if both have same speed
-					if (Math.Abs(wave1.speed - wave2.speed) < 0.001f) {
+					if (Math.Abs(wave1.speed - wave2.speed) > 0.0001f) {
+						wavesToAdd.Add(mergeSameWayWaves(wave1, wave2));
 						wave1.isWasted = true;
 						wave2.isWasted = true;
                     }
@@ -105,7 +121,7 @@ public class WaveUpdateSystem {
 				else {
 					var diff = wave1.xCenter - wave2.xCenter;
 
-					if (Math.Abs(diff) > 0.4)
+					if (Math.Abs(diff) > 0.2f)
 						continue;
 
 					if (Math.Abs(wave1.altitude - wave2.altitude) > 0.001f) {
@@ -130,6 +146,11 @@ public class WaveUpdateSystem {
 				--i;
 			}
 		}
+
+		foreach (var wave in wavesToAdd) {
+			waves.Add(wave);
+		}
+		wavesToAdd.Clear();
 
 		// maybe some wave will take the player with it...
 		foreach (var player in playersStates) {
@@ -156,7 +177,8 @@ public class WaveUpdateSystem {
 		}
 	}
 
-	public void PushDown(float x, HorzDir preferredPushDir) {
+	public bool PushDown(float x, HorzDir preferredPushDir) {
+		bool anyReaction = false;
 		WaveState closestWave = null;
 		float highestAltitude = 0;
 
@@ -174,8 +196,16 @@ public class WaveUpdateSystem {
 		}
 
 		if (closestWave == null) {
+			//foreach (var wave in waves) {
+			//	float width2 = calcWaveWidth(wave)/2f * 1.5f;
+			//	bool isInRange = x > (wave.xCenter - width2) && x < (wave.xCenter + width2);
+			//	if (isInRange)
+			//		return;
+			//}
+
 			// create new wave
 			this.CreateWave(x, preferredPushDir);
+			anyReaction = true;
 		}
 
 		else {
@@ -199,16 +229,20 @@ public class WaveUpdateSystem {
 				// stepped on the left, push to the right
 				if (x < closestWave.xCenter) {
 					pushDir = HorzDir.Right;
+					anyReaction = true;
 				}
 
 				// stepped on the right, push to the left
 				else if (x > closestWave.xCenter) {
 					pushDir = HorzDir.Left;
+					anyReaction = true;
 				}
 			}
 
 			closestWave.horzDir = pushDir;
 		}
+
+		return anyReaction;
 	}
 
 	public void CreateWave(float xCenterOnStart, HorzDir dir) {
@@ -217,7 +251,7 @@ public class WaveUpdateSystem {
 		wave.xCenter = xCenterOnStart;
 		wave.altitude = 3;
 		wave.horzDir = dir;
-		wave.speed = 16f;
+		wave.speed = WAVE_DEFAULT_SPEED;
 		this.wavesToAdd.Add(wave);
 	}
 
@@ -251,16 +285,23 @@ public class WaveUpdateSystem {
 	private static float calcWaveHeight(WaveState wave, float x) {
 		float waveWidth = calcWaveWidth(wave);
 
-		// should be within [0, 1]
-		float startPointDistFactor = wave.isCollidable
-			? Math.Min(1, Math.Abs(wave.xCenterOnStart - x) / waveWidth*2)
-			: 1;
 
 		// should be within [-0.5, 0.5]
 		float centerDistFactor = (wave.xCenter - x)*2 / waveWidth;
+
+		// should be within [0, 1]
+		float startPointDistFactor = wave.isCollidable
+			//? grow(wave.lifeTime, centerDistFactor*2 - (wave.horzDir == HorzDir.Left ? 1 : -1))
+			? Math.Min(1, Math.Abs(wave.xCenterOnStart - x) / waveWidth*2)
+			: 1;
+
 		float y = Mathf.Cos(centerDistFactor * Mathf.PI/2) * wave.altitude * startPointDistFactor;
 
 		return y;
+	}
+
+	private static float grow(float lifeTime, float xPercent/*[0,1] or [-1,0]*/) {
+		return lifeTime * xPercent;
 	}
 
 	private static float calcWaveWidth(WaveState wave) {
@@ -273,7 +314,7 @@ public class WaveUpdateSystem {
 		var dir = wave1.horzDir;
 
 		newWave.horzDir = wave1.horzDir;
-		newWave.altitude = (wave1.altitude + wave2.altitude)/2;
+		newWave.altitude = Mathf.Max(wave1.altitude, wave2.altitude) * (1+Math.Abs(wave2.altitude-wave2.altitude));
 		newWave.speed = (wave1.speed + wave2.speed)/2;
 
 		newWave.xCenter = dir == HorzDir.Left && wave1.xCenter < wave2.xCenter

@@ -25,8 +25,8 @@ public class PlayerUpdateSystem {
         this.waveSystem = waveSystem;
 
 		players = new PlayerState[] {
-			new PlayerState(0).setHouse(HorzDir.Left).setTransform(playerTransforms[0]).refreshPositionData(),
-			new PlayerState(1).setHouse(HorzDir.Right).setTransform(playerTransforms[1]).refreshPositionData()
+			new PlayerState(0).setHouse(HorzDir.Left).setTransform(playerTransforms[0]).refreshPositionData(0),
+			new PlayerState(1).setHouse(HorzDir.Right).setTransform(playerTransforms[1]).refreshPositionData(0)
         };
 		playersBeforeUpdate = new PlayerState[players.Length];
 		for (var i = 0; i < players.Length; ++i) {
@@ -48,7 +48,7 @@ public class PlayerUpdateSystem {
 	public void Update(float currentTime, float deltaTime) {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            waveSystem.CreateWave(players[1].x, HorzDir.Right);
+            waveSystem.CreateWave(players[0].x, HorzDir.Right);
         }
         //var _player = players[1].refreshPositionData();
         //var _playerBeforeUpdate = playersBeforeUpdate[0];
@@ -58,12 +58,13 @@ public class PlayerUpdateSystem {
 
 
         for (var i = 0; i < players.Length; ++i) {
-			var player = players[i].refreshPositionData();
+			var player = players[i];
+            var waveHeight = waveSystem.getWaveHeight(player.transform.position.x);
+			player.refreshPositionData(waveHeight);
 			var playerBeforeUpdate = playersBeforeUpdate[i];
-            var waveHeight = waveSystem.getWaveHeight(player.x);
 
             //Debug.Log(player.x+" sigh " +playerBeforeUpdate.y+" - "+waveHeight + " * " + player.y + " - " + waveHeight + " / " + player.y );
-            if ((playerBeforeUpdate.y - waveHeight) * (player.y - waveHeight) < 0&& player.y<=waveHeight) {
+            if ((playerBeforeUpdate.previousHeightDiff) * (player.previousHeightDiff) < 0 && player.y <= waveHeight) {
                 bool tooSoon = false;
                 foreach (var item in existingCollisions)
                 {
@@ -75,8 +76,8 @@ public class PlayerUpdateSystem {
                     //legit collision
                     //Debug.Log("Porcaputtana "+existingCollisions);
                     //existingCollisions.PrintToLog(currentTime+" legit collision mammt");
-                    
-                    waveSystem.PushDown(player.x, getPreferredPush(player));
+                    Debug.Log("OnPushDown");
+					waveSystem.PushDown(player.x, getPreferredPush(player));
                     existingCollisions.Add(new PlayerFluidCollision() {
                         player=player, collisionTime=currentTime, collisionPosition=player.transform.position
                     });
