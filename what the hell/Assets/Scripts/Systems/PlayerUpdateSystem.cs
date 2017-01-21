@@ -62,7 +62,7 @@ public class PlayerUpdateSystem {
 			var playerBeforeUpdate = playersBeforeUpdate[i];
             var waveHeight = waveSystem.getWaveHeight(player.x);
 
-            Debug.Log(player.x+" sigh " +playerBeforeUpdate.y+" - "+waveHeight + " * " + player.y + " - " + waveHeight + " / " + player.y );
+            //Debug.Log(player.x+" sigh " +playerBeforeUpdate.y+" - "+waveHeight + " * " + player.y + " - " + waveHeight + " / " + player.y );
             if ((playerBeforeUpdate.y - waveHeight) * (player.y - waveHeight) < 0&& player.y<=waveHeight) {
                 bool tooSoon = false;
                 foreach (var item in existingCollisions)
@@ -73,8 +73,13 @@ public class PlayerUpdateSystem {
                 if (!tooSoon)
                 {
                     //legit collision
-                    Debug.Log("legit collision mammt");
+                    //Debug.Log("Porcaputtana "+existingCollisions);
+                    //existingCollisions.PrintToLog(currentTime+" legit collision mammt");
+                    
                     waveSystem.PushDown(player.x, getPreferredPush(player));
+                    existingCollisions.Add(new PlayerFluidCollision() {
+                        player=player, collisionTime=currentTime, collisionPosition=player.transform.position
+                    });
                 }
 			}
 		}
@@ -91,9 +96,9 @@ public class PlayerUpdateSystem {
     bool isCollisionTooSoon(PlayerFluidCollision item, float currentTime, int playerId)
     {
         return  playerId == item.player.id &&(
-                    (currentTime - item.collisionTime < refractaryCollisionPeriod) 
-                    //||
-                    //((players[playerId].transform.position - item.collisionPosition).magnitude < refractaryCollisionDistance )
+                    (currentTime - item.collisionTime < refractaryCollisionPeriod)
+                    ||
+                    ((players[playerId].transform.position - item.collisionPosition).magnitude < refractaryCollisionDistance)
                 );
     }
 
@@ -103,5 +108,9 @@ public class PlayerUpdateSystem {
 		public PlayerState player;
         public float collisionTime;
         public Vector3 collisionPosition;
-	}
+        public override string ToString()
+        {
+            return player.id+" "+collisionTime+" "+collisionPosition;
+        }
+    }
 }
