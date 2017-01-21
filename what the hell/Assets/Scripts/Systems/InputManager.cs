@@ -22,6 +22,27 @@ public class InputManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void UpdateCharacterMovements () {
+        /*
+        if (Input.GetButtonDown(InputNames.Fire1.P(1)))
+        {
+            eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openMainMenu, null);
+        }
+        if (Input.GetButtonDown(InputNames.Fire2.P(1)))
+        {
+            eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.closeMainMenu, null);
+            eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openGameUI, null);
+        }
+
+        if (Input.GetButtonDown(InputNames.Fire3.P(1)))
+        {
+            eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.closeGameUI, null);
+            eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.openEndMenu, null);
+        }
+        if (Input.GetButtonDown(InputNames.Jump.P(1)))
+        {
+            eventHandlerManager.globalBroadcast(this, eventChannels.menu, (int)menuChannelEvents.closeEndMenu, null);
+        }*/
+
         for (int i = 0; i < 2; i++)
         {
             movement[i](Input.GetAxis(InputNames.Horizontal.P(i+1)));

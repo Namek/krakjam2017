@@ -27,7 +27,10 @@ public enum menuChannelEvents
 {
     closeMainMenu = 1,
     openMainMenu = 2,
-    name = 3,
+    closeGameUI = 3,
+    openGameUI = 4,
+    closeEndMenu = 5,
+    openEndMenu = 6,
 }
 public enum inGameChannelEvents
 {
@@ -35,6 +38,7 @@ public enum inGameChannelEvents
     gameOver = 2,
     playerHitByWave =3,
     baseHitByWave=4,
+    gameReset=5
 }
 public enum modelChannelEvents
 {

@@ -22,7 +22,23 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     Transform[] characters;
 
-
+    gameState gamePhase;
+    public gameState GamePhase { get { return gamePhase; } private set {
+            switch (value)
+            {
+                case gameState.mainMenu: eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameReset, null);
+                    break;
+                case gameState.game:
+                    eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameStart, null);
+                    break;
+                case gameState.endGameMenu:
+                    eventHandlerManager.globalBroadcast(this, eventChannels.inGame, (int)inGameChannelEvents.gameOver, null);
+                    break;
+                default:
+                    break;
+            }
+            gamePhase = value;
+        } }
     public float laneWidth {
 		get { return laneRight - laneLeft; }
 	}
@@ -42,5 +58,9 @@ public class GameManager : MonoBehaviour {
         inputManager.UpdateCharacterMovements();
 		playerUpdateSystem.Update(Time.time,Time.deltaTime);
 	}
+
+    public enum gameState {
+        mainMenu, game, endGameMenu
+    }
 }
 
