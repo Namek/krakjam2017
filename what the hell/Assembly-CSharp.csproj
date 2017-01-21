@@ -61,6 +61,7 @@
      <Compile Include="Assets\ProgrammingToolsScripts1.0.10\UtilityMods.cs" />
      <Compile Include="Assets\ProgrammingToolsScripts1.0.10\timerCurve.cs" />
      <Compile Include="Assets\Scripts\CubeWaveRenderer.cs" />
+     <Compile Include="Assets\Scripts\FloatingScript.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Model\HorzDir.cs" />
      <Compile Include="Assets\Scripts\Model\PlayerState.cs" />
