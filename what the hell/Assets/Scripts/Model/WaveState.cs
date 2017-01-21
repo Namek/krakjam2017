@@ -9,6 +9,6 @@ public class WaveState {
 	public float altitude;
 	public HorzDir horzDir;
 	public float speed;
-
-	//public bool hasDealtDamage = false;		
+	public bool isWasted = false;
+	public bool isCollidable = true;
 }
