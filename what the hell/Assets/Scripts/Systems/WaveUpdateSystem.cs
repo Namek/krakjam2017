@@ -6,23 +6,33 @@ using UnityEngine;
 public class WaveUpdateSystem {
 	private const float WAVE_MIN_PERCENT_X_CENTER_DIFF_TO_COLLIDE = 0.01f;
 
+	GameManager gameManager;
+
 	private List<WaveState> waves = new List<WaveState>();
 	private List<WaveState> wavesToRemove = new List<WaveState>();
 	private List<WaveState> wavesToAdd = new List<WaveState>();
 
 
-	public void Start() {
-	}
-
+	public WaveUpdateSystem(GameManager gameManager) {
+		this.gameManager = gameManager;
+	}										  
+	
 
 	public void Update(PlayerState[] playerStates, float deltaTime) {
-
-		//eventHandlerManager.globalBroadcast(null, eventChannels.inGame, inGameChannelEvents.baseHitByWave, )
-
 		// move waves
 		foreach (var wave in waves) {
-			wave.xCenter += (wave.horzDir == WaveState.HorzDir.Left ? -1 : 1) * deltaTime;
+			wave.xCenter += (wave.horzDir == WaveState.HorzDir.Left ? -1 : 1) * deltaTime * wave.speed;
+			float width2 = calcWaveWidth(wave)/2;
+
+			if (wave.xCenter - width2 > gameManager.laneRight || wave.xCenter + width2 < gameManager.laneLeft) {
+				// this wave completely disappears
+				wavesToRemove.Add(wave);
+			}
 		}
+		foreach (var wave in wavesToRemove) {
+			waves.Remove(wave);
+		}
+		wavesToRemove.Clear();
 
 		// detect wave collision on players
 		foreach (var p in playerStates) {
@@ -87,29 +97,51 @@ public class WaveUpdateSystem {
 		foreach (var wave in wavesToRemove) {
 			waves.Remove(wave);
 		}
+		wavesToRemove.Clear();
 
 		foreach (var wave in wavesToAdd) {
 			waves.Add(wave);
 		}
+		wavesToAdd.Clear();
+	}
+
+	public void CreateWave(float xLeftOnStart, WaveState.HorzDir dir) {
+		var wave = new WaveState();
+		wave.xCenterOnStart = xLeftOnStart;
+		wave.altitude = 3;
+		wave.horzDir = dir;
+		wave.speed = 16f;
+		this.waves.Add(wave);
 	}
 
 	public float getWaveHeight(float x) {
-		float altitudeMax = 0;
+		float altitude = 0;
 
 		foreach (var wave in waves) {
+			float waveWidth = calcWaveWidth(wave);
+			float xRight = wave.xCenter + waveWidth/2;
+			float dirX = wave.horzDir == WaveState.HorzDir.Left ? -1 : 1;
+
 			if (isPointInWaveRegion(wave, x)) {
-				if (wave.altitude > altitudeMax) {
-					altitudeMax = wave.altitude;
+				// should be within [0, 1]
+				float startPointDistFactor = Math.Min(1, Math.Abs(wave.xCenterOnStart - x) / waveWidth*2);
+
+				// should be within [-0.5, 0.5]
+				float centerDistFactor = (wave.xCenter - x)*2 / waveWidth;
+				float y = Mathf.Cos(centerDistFactor * Mathf.PI/2) * wave.altitude * startPointDistFactor;
+
+				if (y > altitude) {
+					altitude = y;
 				}							
             }
         }
 
-		return altitudeMax;
+		return altitude;
 	}
 
 	private static bool isPointInWaveRegion(WaveState wave, float x) {
-		float width = calcWaveWidth(wave);
-		return x >= (wave.xCenter - width/2) || x <= (wave.xCenter + width/2);
+		float width2 = calcWaveWidth(wave);
+		return x >= (wave.xCenter - width2) && x <= (wave.xCenter + width2);
 	}
 
 	private static float calcWaveWidth(WaveState wave) {

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CubeWaveRenderer : MonoBehaviour {
-    public float areaToCover = 30f;
+   
     public GameObject cube;
     public List<Transform> cubeList;
 	public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
-        for (int i = 0; i < (int)areaToCover; i++)
+        for (int i = 0; i < (int)gameManager.laneWidth; i++)
         {
             Transform temp = Instantiate(cube).transform;
             temp.position = gameObject.transform.position + Vector3.right * i;

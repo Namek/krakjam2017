@@ -5,9 +5,12 @@ using System.Text;
 
 public class WaveState {
 	public float xCenter;
+	public float xCenterOnStart;
 	public float altitude;
 	public HorzDir horzDir;
 	public float speed;
+
+	public bool hasDealtDamage = false;
 
 	public enum HorzDir {
 		Left, Right

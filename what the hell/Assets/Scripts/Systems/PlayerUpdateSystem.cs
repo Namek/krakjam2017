@@ -38,6 +38,7 @@ public class PlayerUpdateSystem {
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			// TODO just a debug of wave rendering
+			gameManager.waveUpdateSystem.CreateWave(players[0].x, WaveState.HorzDir.Right);
 		}
 
 		for (var i = 0; i < players.Length; ++i) {
