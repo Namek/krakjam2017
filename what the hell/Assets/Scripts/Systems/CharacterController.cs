@@ -38,7 +38,7 @@ public class CharacterController : MonoBehaviour
     float jumpGravity;
     [SerializeField]
     float minJumpDuration;
-
+    bool auraIsActive;
     bool jumpOnce = false;
     bool enableGravity;
 
@@ -67,14 +67,19 @@ public class CharacterController : MonoBehaviour
         if (!IsJumping())
             initJump();
 
-        //showAccumulation();
+        showAccumulation();
         if (Time.time - jumpStartTime < jumpMaxPowerupDuration)
             verticalSpeed += jumpAcceleration*Time.deltaTime;
         //Debug.Log("KeepAccumulatingJumpPower");
         return Time.time - jumpStartTime < jumpMaxPowerupDuration;
     }
-    //void showAccumulation() {
-    //}
+    void showAccumulation()
+    {
+        if (Time.time - jumpStartTime > minJumpDuration)
+        {
+            activateAura();
+        }
+    }
     public bool IsJumping()
     {
         return (transform.position.y>startingHeight ||verticalSpeed>0);
@@ -82,7 +87,9 @@ public class CharacterController : MonoBehaviour
 
     public void StopAccumulatingJumpPower() {
         if (Time.time - jumpStartTime > minJumpDuration)
-            enableGravity = true;
+        {
+            stopAura();
+            enableGravity = true; }
         else
             UniqueCoroutine.UCoroutine(this, doMinimumJump(), "mammt");
     }
@@ -128,10 +135,15 @@ public class CharacterController : MonoBehaviour
         updateYposition();
     }
     void activateAura() {
+        if(!auraIsActive)
+        { 
         auraParticle.Stop();
         auraParticle.Play();
+            auraIsActive = true;
+        }
     }
     void stopAura() {
         auraParticle.Stop();
+        auraIsActive = false;
     }
 }
