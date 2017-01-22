@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public float[] startingPlayerBaseHealth;
     float[] playerBaseHealth= new float[2];
-
+    public float getHealth(HorzDir playerSide) { return playerBaseHealth[(int)playerSide]; }
     // data
     public float damageFactor = 1f;
     public float laneLeft = 0;

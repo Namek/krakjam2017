@@ -44,9 +44,16 @@ public class CharacterController : MonoBehaviour
     bool jumpOnce = false;
     bool enableGravity;
 
+    float startingX;
     public void Start()
     {
         startingHeight = transform.position.y;
+        eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.gameStart, OnGameStart);
+        startingX=transform.position.x;
+    }
+    void OnGameStart(object o)
+    {
+        transform.position= new Vector3(startingX, startingHeight,transform.position.z);
     }
 
     public void StartAccumulatingJumpPower() {

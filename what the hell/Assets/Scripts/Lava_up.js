@@ -5,15 +5,15 @@ var endLevel: float;
 var health: float;
 var step: float;
 var mockHeight:float;
-var mockScript:PlayerScript;
+//var mockScript:MockLava;
 private var mock : GameObject;
 function Awake()
 {
 mock= GameObject.Find("LavaMesh");
-var  mockScript :PlayerScript =mock.GetComponent(PlayerScript);
-mockHeight=mockScript.additionalHeight;
+//var  mockScript :MockLava =mock.GetComponent(MockLava);
+//mockHeight=mockScript.additionalHeight;
 
-waiveHeight=transform.position.y;
+//waiveHeight=transform.position.y;
 startingLevel=transform.position.y;
 endLevel=100;
 health=100;
