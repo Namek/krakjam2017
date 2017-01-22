@@ -46,20 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EventSystem.1.0.3\Core\ChannelEnums.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Core\EventPicker.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Core\eventHandlerManager.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\DelayedDisableOnEvent.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\EventMechanimLinker.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\EventReactionScript.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\EventThrower.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\EventUtility.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\GarbagelessList.cs" />
-     <Compile Include="Assets\EventSystem.1.0.3\Utility\test.cs" />
      <Compile Include="Assets\Lava_Flowing_Shader\Scripts\ScrollingUVs_Layers.cs" />
-     <Compile Include="Assets\ProgrammingToolsScripts1.0.10\UnicqueCoroutine.cs" />
-     <Compile Include="Assets\ProgrammingToolsScripts1.0.10\UtilityMods.cs" />
-     <Compile Include="Assets\ProgrammingToolsScripts1.0.10\timerCurve.cs" />
      <Compile Include="Assets\Scripts\CubeWaveRenderer.cs" />
      <Compile Include="Assets\Scripts\FloatingScript.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -67,11 +54,24 @@
      <Compile Include="Assets\Scripts\Model\PlayerState.cs" />
      <Compile Include="Assets\Scripts\Model\WaveState.cs" />
      <Compile Include="Assets\Scripts\Systems\CharacterController.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Core\ChannelEnums.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Core\EventPicker.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Core\eventHandlerManager.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\DelayedDisableOnEvent.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\EventMechanimLinker.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\EventReactionScript.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\EventThrower.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\EventUtility.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\GarbagelessList.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Utility\test.cs" />
      <Compile Include="Assets\Scripts\Systems\InputManager.cs" />
      <Compile Include="Assets\Scripts\Systems\InputNames.cs" />
      <Compile Include="Assets\Scripts\Systems\JoystickButtonDebugger.cs" />
      <Compile Include="Assets\Scripts\Systems\PlayerUpdateSystem.cs" />
      <Compile Include="Assets\Scripts\Systems\ProceduralMesh.cs" />
+     <Compile Include="Assets\Scripts\Systems\ProgrammingToolsScripts1.0.10\UnicqueCoroutine.cs" />
+     <Compile Include="Assets\Scripts\Systems\ProgrammingToolsScripts1.0.10\UtilityMods.cs" />
+     <Compile Include="Assets\Scripts\Systems\ProgrammingToolsScripts1.0.10\timerCurve.cs" />
      <Compile Include="Assets\Scripts\Systems\WaveUpdateSystem.cs" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Simple.shader" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Diffuse_Lava_Distort.shader" />

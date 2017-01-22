@@ -68,7 +68,7 @@ function RandomFloatForce()
 		if 
 		(randomFloatForce == 0)
 		{
-			randomFloatForce = Random.Range(.025f, .125f);
+			randomFloatForce = Random.Range(.325f, .525f);
 		}
 		else
 		{

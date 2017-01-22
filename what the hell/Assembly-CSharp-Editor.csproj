@@ -46,7 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EventSystem.1.0.3\Editor\EventPickerDrawer.cs" />
+     <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Editor\EventPickerDrawer.cs" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Simple.shader" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Diffuse_Lava_Distort.shader" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort.shader" />
