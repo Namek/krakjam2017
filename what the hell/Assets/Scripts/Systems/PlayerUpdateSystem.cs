@@ -13,7 +13,7 @@ public class PlayerUpdateSystem {
     float refractaryCollisionDistance;
 	GameManager gameManager;
     WaveUpdateSystem waveSystem;
-
+    float gameStartTime;
 	public PlayerUpdateSystem(
         GameManager gameManager, 
         Transform[] playerTransforms, 
@@ -37,9 +37,14 @@ public class PlayerUpdateSystem {
         this.refractaryCollisionPeriod = refractaryCollisionPeriod;
         this.refractaryCollisionDistance = refractaryCollisionDistance;
 
-    }			
-	
-	private void rememberPlayerStates() {
+        eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.gameStart, onGameStart);
+    }
+    void onGameStart(object o)
+    {
+        gameStartTime = Time.time;
+    }
+
+    private void rememberPlayerStates() {
 		for (var i = 0; i < players.Length; ++i) {
 			playersBeforeUpdate[i].setValues(players[i]);
 		}
@@ -69,7 +74,7 @@ public class PlayerUpdateSystem {
                     //legit collision
                     //Debug.Log("Porcaputtana "+existingCollisions);
                     //existingCollisions.PrintToLog(currentTime+" legit collision mammt");
-                    Debug.Log("OnPushDown");
+                    if(Time.time-gameStartTime>=0.1f)
 					waveSystem.PushDown(player.x, getPreferredPush(player), playerBeforeUpdate.y -player.y);
                     existingCollisions.Add(new PlayerFluidCollision() {
                         player=player, collisionTime=currentTime, collisionPosition=player.transform.position

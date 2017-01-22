@@ -31,9 +31,6 @@ public class BaseParticleManager : MonoBehaviour {
                 timeToStop += w.altitude * damageFactor;
                 mainmod.startLifetime = new ParticleSystem.MinMaxCurve( Mathf.Max(w.altitude * damageFactor, mainmod.startLifetime.constant));
             }
-
-            Debug.Log(" mammt " + (w.altitude * damageFactor) + " - " + mainmod.startLifetime.constant+ " isplaying:"+particle.isPlaying);
-            
         }
     }
 

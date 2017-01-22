@@ -53,6 +53,7 @@ public class CharacterController : MonoBehaviour
     }
     void OnGameStart(object o)
     {
+        verticalSpeed = 0;
         transform.position= new Vector3(startingX, startingHeight,transform.position.z);
     }
 

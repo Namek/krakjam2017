@@ -7,8 +7,8 @@ public class WinScreenManager : MonoBehaviour {
     [SerializeField]
     Text winAnnouncer;
     string baseText;
-    string left="left";
-    string right="right";
+    string left="LEFT";
+    string right="RIGHT";
     // Use this for initialization
     void Start ()
     {

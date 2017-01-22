@@ -274,7 +274,6 @@ public class WaveUpdateSystem {
 		wave.altitude = STARTING_WAVE_SIZE * (1f + vertSpeed);
 		wave.horzDir = dir;
 		wave.speed = Math.Min(WAVE_MAX_SPEED, WAVE_DEFAULT_SPEED * (1f + vertSpeed*2/3));
-		Debug.Log(vertSpeed);
 		this.wavesToAdd.Add(wave);
 	}
 
