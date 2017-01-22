@@ -59,7 +59,6 @@ public class CharacterController : MonoBehaviour
 
     public void StartAccumulatingJumpPower() {
         //start jump
-        Debug.Log("StartAccumulatingJumpPower "+ IsJumping());
         if (!jumpOnce)
         {
             initJump();
