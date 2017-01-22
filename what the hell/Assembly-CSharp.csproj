@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\CubeWaveRenderer.cs" />
      <Compile Include="Assets\Scripts\FloatingScript.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\MockLava.cs" />
      <Compile Include="Assets\Scripts\Model\HorzDir.cs" />
      <Compile Include="Assets\Scripts\Model\PlayerState.cs" />
      <Compile Include="Assets\Scripts\Model\WaveState.cs" />

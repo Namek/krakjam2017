@@ -81,13 +81,13 @@ public class ProceduralMesh : MonoBehaviour
 
     }
     public AnimationCurve mockWave;
-    public void UpdateMesh(WaveUpdateSystem waveSystem)
-    {
+    public virtual void UpdateMesh(WaveUpdateSystem waveSystem)
+	{
         float currentXvalue = 0;
         for (int i = 0; i < fieldLenght* resolution; i++)
         {
             float mockx = ((float) currentXvalue) / (float)fieldLenght;//normally: getHeight((float) currentXvalue) instead of mockWave.Evaluate(mockx)
-			float y = waveSystem.getWaveHeight((float) currentXvalue);
+			float y = calculateHeight(waveSystem,currentXvalue);
             vertices[topIndexVertexList[i]] = Vector3.right * i * vertexHorizontalDistance + Vector3.up *y ;
             vertices[midIndexVertexList[i]] = Vector3.right * i * vertexHorizontalDistance + Vector3.up *Mathf.Max (0, y - topQuadHeight);
             currentXvalue += vertexHorizontalDistance;
@@ -97,5 +97,7 @@ public class ProceduralMesh : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
-    
+	public virtual float calculateHeight(WaveUpdateSystem waveSystem, float currentXvalue){
+		return waveSystem.getWaveHeight((float) currentXvalue);
+	}
 }
