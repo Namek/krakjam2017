@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour {
     {
         for (int i = 0; i < 2; i++)
         {
-            if (Input.GetButtonDown(InputNames.Submit.P(i + 1)))
+            if (Input.GetButtonDown(InputNames.Cancel.P(i + 1)))
                 manager.GamePhase = GameManager.gameState.game;
         }
     }
@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour {
     {
         for (int i = 0; i < 2; i++)
         {
-            if (Input.GetButtonDown(InputNames.Submit.P(i + 1)))
+            if (Input.GetButtonDown(InputNames.Cancel.P(i + 1)))
                 manager.GamePhase = GameManager.gameState.mainMenu;
         }
     }
