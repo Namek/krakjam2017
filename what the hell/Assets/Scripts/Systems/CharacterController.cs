@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
+    public Vector2 limits;
+
     [SerializeField]
     Animator animatorControl;
     [SerializeField]
@@ -122,7 +124,9 @@ public class CharacterController : MonoBehaviour
     void updateXposition() {
         animatorControl.SetFloat(horizontalSpeedValueName, currentSpeed);
         //update pos
-        transform.position += Vector3.right * accelerationCurve.Evaluate(Mathf.Clamp01(Mathf.Abs(currentSpeed))) * movementSpeed * (currentSpeed > 0 ? 1 : -1);
+        float nextStep = accelerationCurve.Evaluate(Mathf.Clamp01(Mathf.Abs(currentSpeed))) * movementSpeed * (currentSpeed > 0 ? 1 : -1);
+        if (limits.x<transform.position.x+nextStep&&transform.position.x+nextStep<limits.y)
+        transform.position += Vector3.right * nextStep;
 
         //dampen current speed
         if (isDecelerating)

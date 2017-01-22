@@ -7,7 +7,7 @@ public class WaveUpdateSystem {
 	private const float WAVE_MIN_WIDTH_DIFF_TO_COLLIDE = 0.01f;
 	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.4f;
 	private const float WAVE_SPEEDUP_FACTOR = 2f;
-	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.1f;
+	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.5f;
 	private const float WAVE_MAX_ALTITUDE = 10;
 	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
 	private const float WAVE_DEFAULT_SPEED = 12f;
@@ -17,9 +17,9 @@ public class WaveUpdateSystem {
 	public List<WaveState> waves = new List<WaveState>();
 	private List<WaveState> wavesToAdd = new List<WaveState>();
 	private List<WaveState> wavesToRemove = new List<WaveState>();
+    private float STARTING_WAVE_SIZE=2f;
 
-
-	public WaveUpdateSystem(GameManager gameManager) {
+    public WaveUpdateSystem(GameManager gameManager) {
 		this.gameManager = gameManager;
 	}										  
 	
@@ -251,7 +251,7 @@ public class WaveUpdateSystem {
 		var wave = new WaveState();
 		wave.xCenterOnStart = xCenterOnStart;
 		wave.xCenter = xCenterOnStart;
-		wave.altitude = 3;
+		wave.altitude = STARTING_WAVE_SIZE;
 		wave.horzDir = dir;
 		wave.speed = WAVE_DEFAULT_SPEED;
 		this.wavesToAdd.Add(wave);

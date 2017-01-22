@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     InputManager inputManager;
     [SerializeField]
     Transform[] characters;
+    CharacterController[] characterControllers= new CharacterController[2];
 
     gameState gamePhase;
     public gameState GamePhase { get { return gamePhase; } set
@@ -60,7 +61,12 @@ public class GameManager : MonoBehaviour
 	void Awake() {
         eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, onBaseHit );
         eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.gameStart, onGameStart );
-        
+        for (int i = 0; i < 2; i++)
+        {
+            characterControllers[i] = characters[i].GetComponent<CharacterController>();
+        }
+        characterControllers[0].limits = new Vector2(laneLeft, laneLeft + laneWidth / 2f);
+        characterControllers[1].limits = new Vector2(laneRight- laneWidth / 2f, laneRight);
         waveUpdateSystem = new WaveUpdateSystem(this);
 		playerUpdateSystem = new PlayerUpdateSystem(this, characters,waveUpdateSystem, refractaryCollisionPeriod,refractaryCollisionDistance );
 		proceduralMesh.fieldLenght = (int)laneWidth;
