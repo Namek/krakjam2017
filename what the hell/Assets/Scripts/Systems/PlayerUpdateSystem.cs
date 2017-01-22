@@ -46,13 +46,6 @@ public class PlayerUpdateSystem {
 	}									   
 
 	public void Update(float currentTime, float deltaTime) {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            waveSystem.CreateWave(players[0].x, HorzDir.Right);
-        }
-        //var _player = players[1].refreshPositionData();
-        //var _playerBeforeUpdate = playersBeforeUpdate[0];
-        //var _waveHeight = waveSystem.getWaveHeight(_player.x);
         rememberPlayerStates();
         forgetOldCollisions(currentTime);
 

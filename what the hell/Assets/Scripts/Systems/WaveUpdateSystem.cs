@@ -5,19 +5,28 @@ using UnityEngine;
 
 public class WaveUpdateSystem {
 	private const float WAVE_MIN_WIDTH_DIFF_TO_COLLIDE = 0.01f;
-	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.4f;
+	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.5f;
 	private const float WAVE_SPEEDUP_FACTOR = 2f;
-	private const float WAVE_ALTITUDE_GROW_FACTOR = 2.4f;
+	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.9f;
 	private const float WAVE_MAX_ALTITUDE = 10;
 	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
 	private const float WAVE_DEFAULT_SPEED = 12f;
+	private const float WAVE_MAX_SPEED = 20;
+	private float STARTING_WAVE_SIZE = 1.5f;
 
 	GameManager gameManager;
 
 	public List<WaveState> waves = new List<WaveState>();
 	private List<WaveState> wavesToAdd = new List<WaveState>();
 	private List<WaveState> wavesToRemove = new List<WaveState>();
-    private float STARTING_WAVE_SIZE=2f;
+	private List<Collision> futureCollisions = new List<Collision>();
+
+	struct Collision {
+		public WaveState wave1;
+		public WaveState wave2;
+	}
+
+    
 
     public WaveUpdateSystem(GameManager gameManager) {
 		this.gameManager = gameManager;
@@ -75,6 +84,12 @@ public class WaveUpdateSystem {
 		}
 
 		// detect collisions between waves
+		for (int i = 0; i < futureCollisions.Count; ++i) {
+			var col = futureCollisions[i];
+			//col.wave1
+			// TODO? maybe?
+		}
+
 		for (int i = 0; i < waves.Count; ++i) {
 			for (int j = 1; j < waves.Count; ++j) {  
 				if (i == j)
@@ -121,7 +136,7 @@ public class WaveUpdateSystem {
 				else {
 					var diff = wave1.xCenter - wave2.xCenter;
 
-					if (Math.Abs(diff) > 0.2f)
+					if (Math.Abs(diff) > 0.3f)
 						continue;
 
 					if (Math.Abs(wave1.altitude - wave2.altitude) > 0.001f) {
@@ -177,7 +192,7 @@ public class WaveUpdateSystem {
 		}
 	}
 
-	public bool PushDown(float x, HorzDir preferredPushDir, float speed) {
+	public bool PushDown(float x, HorzDir preferredPushDir, float vertSpeed) {
 		bool anyReaction = false;
 		WaveState closestWave = null;
 		float highestAltitude = 0;
@@ -204,7 +219,7 @@ public class WaveUpdateSystem {
 			//}
 
 			// create new wave
-			this.CreateWave(x, preferredPushDir);
+			this.CreateWave(x, preferredPushDir, vertSpeed);
 			anyReaction = true;
 		}
 
@@ -252,13 +267,14 @@ public class WaveUpdateSystem {
 		return anyReaction;
 	}
 
-	public void CreateWave(float xCenterOnStart, HorzDir dir) {
+	public void CreateWave(float xCenterOnStart, HorzDir dir, float vertSpeed) {
 		var wave = new WaveState();
 		wave.xCenterOnStart = xCenterOnStart;
 		wave.xCenter = xCenterOnStart;
-		wave.altitude = STARTING_WAVE_SIZE;
+		wave.altitude = STARTING_WAVE_SIZE * (1f + vertSpeed);
 		wave.horzDir = dir;
-		wave.speed = WAVE_DEFAULT_SPEED;
+		wave.speed = Math.Min(WAVE_MAX_SPEED, WAVE_DEFAULT_SPEED * (1f + vertSpeed*2/3));
+		Debug.Log(vertSpeed);
 		this.wavesToAdd.Add(wave);
 	}
 
