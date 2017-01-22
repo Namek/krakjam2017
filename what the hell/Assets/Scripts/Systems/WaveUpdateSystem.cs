@@ -136,7 +136,7 @@ public class WaveUpdateSystem {
 				else {
 					var diff = wave1.xCenter - wave2.xCenter;
 
-					if (Math.Abs(diff) > 0.3f)
+					if (Math.Abs(diff) > 0.5f)
 						continue;
 
 					if (Math.Abs(wave1.altitude - wave2.altitude) > 0.001f) {
