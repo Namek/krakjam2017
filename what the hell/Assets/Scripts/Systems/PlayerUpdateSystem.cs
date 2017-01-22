@@ -79,6 +79,8 @@ public class PlayerUpdateSystem {
                     existingCollisions.Add(new PlayerFluidCollision() {
                         player=player, collisionTime=currentTime, collisionPosition=player.transform.position
                     });
+
+					eventHandlerManager.globalBroadcast(null, eventChannels.inGame, (int)inGameChannelEvents.playerLand, i);
                 }
 			}
 		}

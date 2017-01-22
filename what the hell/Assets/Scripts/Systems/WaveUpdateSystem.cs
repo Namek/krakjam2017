@@ -8,7 +8,7 @@ public class WaveUpdateSystem {
 	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.5f;
 	private const float WAVE_SPEEDUP_FACTOR = 2f;
 	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.9f;
-	private const float WAVE_MAX_ALTITUDE = 10;
+	public const float WAVE_MAX_ALTITUDE = 10;
 	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
 	private const float WAVE_DEFAULT_SPEED = 12f;
 	private const float WAVE_MAX_SPEED = 20;

@@ -44,12 +44,39 @@ public class CharacterController : MonoBehaviour
     bool jumpOnce = false;
     bool enableGravity;
 
+	[SerializeField]
+	int playerIndex;
+
     float startingX;
+
+	[SerializeField]
+	AudioSource soundPlayer;
+
+	[SerializeField]
+	AudioSource baseHitSoundPlayer;
+
+	[SerializeField]
+	AudioClip landSound;
+
+	[SerializeField]
+	AudioClip baseHitSound1;
+
+	[SerializeField]
+	AudioClip baseHitSound2;
+	
+	[SerializeField]
+	AudioClip baseHitSound3;
+
+
     public void Start()
     {
         startingHeight = transform.position.y;
         eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.gameStart, OnGameStart);
         startingX=transform.position.x;
+
+		eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.playerLand, onPlayerLand);
+		eventHandlerManager.globalAddListener(eventChannels.inGame, (int)inGameChannelEvents.baseHitByWave, onBaseHit);
+
     }
     void OnGameStart(object o)
     {
@@ -157,4 +184,29 @@ public class CharacterController : MonoBehaviour
         auraParticle.Stop();
         auraIsActive = false;
     }
+
+	private void onPlayerLand(object playerIndex) {
+		if (this.playerIndex == (int)playerIndex) {
+			soundPlayer.clip = landSound;
+			soundPlayer.Play();
+		}
+	}
+
+	private void onBaseHit(object obj) {
+		var waveState = obj as WaveState;
+		if ((int)waveState.horzDir != this.playerIndex) {
+			Debug.Log(waveState.altitude);
+			if (waveState.altitude < 3.5f) {
+				baseHitSoundPlayer.clip = baseHitSound2;
+			}
+			else if (waveState.altitude < 6f) {
+				baseHitSoundPlayer.clip = baseHitSound1;
+			}
+			else {
+				baseHitSoundPlayer.clip = baseHitSound3;
+			}
+
+			baseHitSoundPlayer.Play();
+		}
+	}
 }

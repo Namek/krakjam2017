@@ -38,7 +38,8 @@ public enum inGameChannelEvents
     gameOver = 2,
     playerHitByWave =3,
     baseHitByWave=4,
-    gameReset=5
+    gameReset=5,
+	playerLand = 6,
 }
 public enum modelChannelEvents
 {
