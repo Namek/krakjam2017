@@ -7,7 +7,7 @@ public class WaveUpdateSystem {
 	private const float WAVE_MIN_WIDTH_DIFF_TO_COLLIDE = 0.01f;
 	private const float WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN = 0.4f;
 	private const float WAVE_SPEEDUP_FACTOR = 2f;
-	private const float WAVE_ALTITUDE_GROW_FACTOR = 1.5f;
+	private const float WAVE_ALTITUDE_GROW_FACTOR = 2.4f;
 	private const float WAVE_MAX_ALTITUDE = 10;
 	private const float WAVE_LIFE_TIME_GROW_FACTOR = 1f;
 	private const float WAVE_DEFAULT_SPEED = 12f;
@@ -211,7 +211,7 @@ public class WaveUpdateSystem {
 		else {
 			// detect collision region: front/back/center
 			float width = calcWaveWidth(closestWave);
-			float topWidth2 = WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN * width / 2;
+			float topWidth2 = WAVE_TOP_PERCENT_WIDTH_TO_PUSH_DOWN * width;
 
 			// stepped on the tight center, make it faster and push backwards!
 			// ... and make it little bigger
@@ -229,15 +229,20 @@ public class WaveUpdateSystem {
 				// stepped on the left, push to the right
 				if (x < closestWave.xCenter) {
 					pushDir = HorzDir.Right;
-					closestWave.speed *= WAVE_SPEEDUP_FACTOR;
 					anyReaction = true;
 				}
 
 				// stepped on the right, push to the left
 				else if (x > closestWave.xCenter) {
 					pushDir = HorzDir.Left;
-					closestWave.speed *= WAVE_SPEEDUP_FACTOR;
 					anyReaction = true;
+				}
+
+				if (pushDir == closestWave.horzDir) {
+					closestWave.speed *= WAVE_SPEEDUP_FACTOR;
+				}
+				else {
+					closestWave.speed = Math.Min(WAVE_SPEEDUP_FACTOR, closestWave.speed / WAVE_SPEEDUP_FACTOR);
 				}
 			}
 
