@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641252, b: 0.574817, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -820,7 +820,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4713941306179572, guid: 67c46a3d3291b7d41901d376ab777eea, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 28.2
+      value: 25.976
       objectReference: {fileID: 0}
     - target: {fileID: 4713941306179572, guid: 67c46a3d3291b7d41901d376ab777eea, type: 2}
       propertyPath: m_LocalPosition.y
@@ -856,7 +856,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4713941306179572, guid: 67c46a3d3291b7d41901d376ab777eea, type: 2}
       propertyPath: m_LocalScale.x
-      value: 11.079021
+      value: 13.433313
       objectReference: {fileID: 0}
     - target: {fileID: 4713941306179572, guid: 67c46a3d3291b7d41901d376ab777eea, type: 2}
       propertyPath: m_LocalScale.y
@@ -2660,7 +2660,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1072821270}
   serializedVersion: 5
   lengthInSec: 5
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -5896,7 +5896,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1235585112}
   serializedVersion: 5
   lengthInSec: 5
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -8952,7 +8952,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1472241108}
   serializedVersion: 5
   lengthInSec: 5
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -12363,31 +12363,31 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 38.7
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 17.9
+      value: 21.8
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 55.3
+      value: 56.1
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.019619891
+      value: -0.99671155
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0.981764
+      value: -0.04003215
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.18527877
+      value: -0.0028274078
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.03776615
+      value: 0.07039617
       objectReference: {fileID: 0}
     - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
       propertyPath: m_RootOrder
@@ -12400,7 +12400,32 @@ Prefab:
     - target: {fileID: 114622322213024562, guid: 5b3e7dc27f4efb446ad71e09b341108e,
         type: 2}
       propertyPath: uvAnimationRate.x
-      value: -0.16
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -4.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 11.315309
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 5.4829535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430642534761790, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -171.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 114622322213024562, guid: 5b3e7dc27f4efb446ad71e09b341108e,
+        type: 2}
+      propertyPath: uvAnimationRate.y
+      value: 0.14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5b3e7dc27f4efb446ad71e09b341108e, type: 2}
@@ -12688,7 +12713,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1800066683}
   serializedVersion: 5
   lengthInSec: 5
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
