@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: mtl_lava_diffuse
-  m_Shader: {fileID: 10800, guid: 0000000000000000f000000000000000, type: 0}
+  m_Name: Material
+  m_Shader: {fileID: 4800000, guid: 036402a4b0d5f4342bbf1b572714f64e, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
   m_CustomRenderQueue: -1
@@ -25,7 +25,7 @@ Material:
         name: _DetailAlbedoMap
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1.25, y: 1.87}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _DetailMask
@@ -49,32 +49,20 @@ Material:
         name: _EmissionMap
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1.92, y: 0.66}
-        m_Offset: {x: -0.28, y: 0.51}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - first:
         name: _LavaTex
       second:
-        m_Texture: {fileID: 2800000, guid: 93a726948508cc14eab67fb1abe2daa8, type: 3}
+        m_Texture: {fileID: 2800000, guid: aed369d136cf0174e8e04dfb34567e6a, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.08743531, y: 0}
+        m_Offset: {x: 0, y: 0}
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: 6b2741bbc6ec3d64da53bb8a70bd0fda, type: 3}
-        m_Scale: {x: 1.92, y: 0.66}
-        m_Offset: {x: -0.28, y: 0.51}
-    - first:
-        name: _MainTex2
-      second:
-        m_Texture: {fileID: 2800000, guid: bef54341b6d21864c82d47f3bed4c7db, type: 3}
+        m_Texture: {fileID: 2800000, guid: 348fa4d278c53ad4dacd07df1e63a248, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.28963017, y: 0}
-    - first:
-        name: _MainTex_Add
-      second:
-        m_Texture: {fileID: 2800000, guid: 1a5d8cd24a805cd44b00c7f1e1e4d287, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 1.5691679, y: 0}
+        m_Offset: {x: 0, y: 0}
     - first:
         name: _MetallicGlossMap
       second:
@@ -93,16 +81,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - first:
-        name: _SpecGlossMap
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
     - first:
         name: _BumpScale
       second: 1
@@ -112,9 +91,6 @@ Material:
     - first:
         name: _DetailNormalMapScale
       second: 1
-    - first:
-        name: _Displacement
-      second: 0.0375
     - first:
         name: _DistortX
       second: 1
@@ -146,9 +122,6 @@ Material:
         name: _Parallax
       second: 0.02
     - first:
-        name: _RefractTexTiling
-      second: 1
-    - first:
         name: _SmoothnessTextureChannel
       second: 0
     - first:
@@ -165,17 +138,8 @@ Material:
       second: 1
     m_Colors:
     - first:
-        name: _ChannelFactor
-      second: {r: -0.3281326, g: 0.5920941, b: 0.7360384, a: 0}
-    - first:
         name: _Color
-      second: {r: 1, g: 1, b: 1, a: 0.07058824}
+      second: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
-    - first:
-        name: _SpecColor
-      second: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-    - first:
-        name: _SpeedStrength
-      second: {r: 1, g: 1, b: 1, a: 1}

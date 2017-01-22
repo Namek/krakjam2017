@@ -47,13 +47,18 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Lava_Flowing_Shader\Scripts\ScrollingUVs_Layers.cs" />
+     <Compile Include="Assets\Scripts\BaseParticleManager.cs" />
+     <Compile Include="Assets\Scripts\CaveFillManager.cs" />
      <Compile Include="Assets\Scripts\CubeWaveRenderer.cs" />
+     <Compile Include="Assets\Scripts\FloatInCave.cs" />
+     <Compile Include="Assets\Scripts\FloatOnLava.cs" />
      <Compile Include="Assets\Scripts\FloatingScript.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\MockLava.cs" />
      <Compile Include="Assets\Scripts\Model\HorzDir.cs" />
      <Compile Include="Assets\Scripts\Model\PlayerState.cs" />
      <Compile Include="Assets\Scripts\Model\WaveState.cs" />
+     <Compile Include="Assets\Scripts\PlayerLifeBarManager.cs" />
      <Compile Include="Assets\Scripts\Systems\CharacterController.cs" />
      <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Core\ChannelEnums.cs" />
      <Compile Include="Assets\Scripts\Systems\EventSystem.1.0.3\Core\EventPicker.cs" />
@@ -74,6 +79,7 @@
      <Compile Include="Assets\Scripts\Systems\ProgrammingToolsScripts1.0.10\UtilityMods.cs" />
      <Compile Include="Assets\Scripts\Systems\ProgrammingToolsScripts1.0.10\timerCurve.cs" />
      <Compile Include="Assets\Scripts\Systems\WaveUpdateSystem.cs" />
+     <Compile Include="Assets\Scripts\WinScreenManager.cs" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Simple.shader" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Diffuse_Lava_Distort.shader" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort.shader" />
